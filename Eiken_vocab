@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>EIKEN 1級 Vocab</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #2dd4bf;
+      --purple: #818cf8;
+      --red: #f87171;
+      --amber: #f59e0b;
+      --slate: #94a3b8;
+      --dark: #0f172a;
+      --card-bg: rgba(30,41,59,0.85);
+      --border: rgba(255,255,255,0.07);
+    }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      font-family: 'DM Sans', 'Noto Sans JP', sans-serif;
+      color: #e2e8f0;
+      padding-bottom: 60px;
+    }
+    header {
+      background: rgba(15,23,42,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--teal), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header-info { font-size: 12px; color: var(--slate); }
+    .tabs {
+      display: flex;
+      background: rgba(15,23,42,0.6);
+      border-bottom: 1px solid var(--border);
+      padding: 0 14px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      padding: 11px 18px;
+      border: none;
+      cursor: pointer;
+      background: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--slate);
+      border-bottom: 3px solid transparent;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    .tab-btn.active { color: var(--teal); border-bottom-color: var(--teal); }
+    .container { max-width: 620px; margin: 0 auto; padding: 18px 14px; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px 18px;
+      margin-bottom: 14px;
+      backdrop-filter: blur(6px);
+    }
+    .btn {
+      padding: 10px 22px;
+      border: none;
+      border-radius: 11px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      transition: all .15s;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      color: #fff;
+    }
+    .btn-ghost {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border: none;
+    }
+    .btn-danger {
+      background: rgba(248,113,113,0.15);
+      color: var(--red);
+      border: 1px solid rgba(248,113,113,0.3);
+    }
+    .btn-success {
+      background: rgba(45,212,191,0.15);
+      color: var(--teal);
+      border: 1px solid rgba(45,212,191,0.3);
+    }
+    .btn:disabled { opacity: 0.4; cursor: default; }
+    .btn-full { width: 100%; }
+    .word-display {
+      font-size: 38px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hint-box {
+      background: rgba(129,140,248,0.08);
+      border: 1px solid rgba(129,140,248,0.2);
+      border-radius: 11px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .hint-mnemonic { font-size: 13px; color: #a5b4fc; margin-bottom: 3px; }
+    .hint-etymology { font-size: 12px; color: var(--slate); }
+    .choice-btn {
+      width: 100%;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all .15s;
+      background: rgba(30,41,59,0.5);
+      border: 1px solid var(--border);
+      color: #e2e8f0;
+    }
+    .choice-btn.correct { background: rgba(45,212,191,0.12); border: 2px solid var(--teal); }
+    .choice-btn.wrong { background: rgba(248,113,113,0.12); border: 2px solid var(--red); }
+    .choice-btn.other-result { border: 1px solid var(--border); }
+    .choice-btn:disabled { cursor: default; }
+    .progress-bar {
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.06);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--purple));
+      transition: width .3s;
+    }
+    .input-field {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 11px;
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #e2e8f0;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .input-field:focus { border-color: var(--teal); }
+    textarea.input-field { height: 160px; resize: vertical; line-height: 1.6; }
+    .tag {
+      display: inline-block;
+      border-radius: 5px;
+      padding: 1px 7px;
+      font-size: 10px;
+      font-weight: 700;
+      margin-left: 5px;
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 14px 10px; text-align: center; }
+    .stat-value { font-size: 22px; font-weight: 800; }
+    .stat-label { font-size: 10px; color: var(--slate); margin-top: 2px; }
+    .filter-row { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+    .word-list { max-height: 460px; overflow-y: auto; }
+    .word-item { padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: flex-start; }
+    .word-item-left { flex: 1; }
+    .word-item-name { font-weight: 700; }
+    .word-item-meaning { font-size: 12px; color: var(--slate); margin-top: 2px; }
+    .word-item-mnemonic { font-size: 11px; color: #a5b4fc; margin-top: 2px; }
+    .word-item-right { text-align: right; flex-shrink: 0; margin-left: 10px; }
+    .word-item-count { font-size: 10px; color: var(--slate); margin-top: 3px; }
+    .answer-box { padding: 10px 14px; border-radius: 10px; margin-bottom: 10px; }
+    .answer-box.correct-ans { background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.3); }
+    .answer-box.wrong-ans { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); }
+    .answer-box.official-ans { background: rgba(45,212,191,0.05); border: 1px solid rgba(45,212,191,0.2); }
+    .ans-label { font-size: 11px; color: var(--slate); margin-bottom: 2px; }
+    .ans-value { font-weight: 600; }
+    .ans-value.teal { color: var(--teal); font-weight: 700; }
+    .session-stats { display: flex; justify-content: center; gap: 24px; margin-bottom: 20px; }
+    .session-stat-val { font-size: 28px; font-weight: 800; }
+    .session-stat-label { font-size: 11px; color: var(--slate); }
+    .mode-row { display: flex; gap: 8px; margin-bottom: 14px; align-items: center; }
+    .due-count { margin-left: auto; font-size: 12px; color: var(--slate); }
+    .section-title { font-size: 13px; color: var(--slate); margin-bottom: 12px; }
+    .center { text-align: center; }
+    .emoji-big { font-size: 42px; margin-bottom: 10px; }
+    .card-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .card-subtitle { font-size: 13px; color: var(--slate); margin-bottom: 18px; }
+    .flex-row { display: flex; gap: 8px; }
+    .flex-1 { flex: 1; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .import-msg { padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 10px; }
+    .import-msg.ok { background: rgba(45,212,191,0.08); border: 1px solid rgba(45,212,191,0.2); }
+    .import-msg.err { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); }
+    .counter-text { font-size: 11px; color: var(--slate); text-align: right; margin-bottom: 8px; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+    @media (max-width: 400px) {
+      .word-display { font-size: 30px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<script>
+// ── SM-2 Algorithm ─────────────────────────────────────────────
+function sm2(card, quality) {
+  let {interval, repetitions, easeFactor} = card;
+  if (quality < 3) { repetitions = 0; interval = 1; }
+  else {
+    if (repetitions === 0) interval = 1;
+    else if (repetitions === 1) interval = 6;
+    else interval = Math.round(interval * easeFactor);
+    repetitions += 1;
+  }
+  easeFactor = Math.max(1.3, easeFactor + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+  return {interval, repetitions, easeFactor, nextReview: Date.now() + interval * 86400000};
+}
+
+// ── Word Data ──────────────────────────────────────────────────
+const WORDS = [
+  {word:"abhor",meaning:"ひどく嫌う・憎む",mnemonic:"ab(離れて)+hor(恐怖)→恐怖で遠ざかる",etymology:"ラテン語 abhorrēre「身震いして退く」"},
+  {word:"abject",meaning:"みじめな・卑屈な",mnemonic:"ab(下に)+ject(投げる)→どん底に投げ捨てられた",etymology:"ラテン語 abicere「投げ捨てる」"},
+  {word:"abjure",meaning:"（信念を）公式に捨てる",mnemonic:"ab(離れて)+jure(誓う)→誓いを捨てる",etymology:"ラテン語 abjurare「宣誓して否定する」"},
+  {word:"abscond",meaning:"（罪を犯して）逃亡する",mnemonic:"ab(離れて)+scond(隠す)→隠れて逃げる",etymology:"ラテン語 abscondere「隠す」"},
+  {word:"abstain",meaning:"（意図的に）控える・禁欲する",mnemonic:"ab(離れて)+stain(立つ)→立ち離れて控える",etymology:"ラテン語 abstinere「遠ざける」"},
+  {word:"abstruse",meaning:"難解な・深遠な",mnemonic:"ab+struse(押し込む)→奥深くに押し込まれた",etymology:"ラテン語 abstrusus「隠された」"},
+  {word:"acerbic",meaning:"辛辣な・酸っぱい",mnemonic:"acer(鋭い・酸っぱい)+bic→酸っぱく鋭い",etymology:"ラテン語 acerbus「酸っぱい・辛い」"},
+  {word:"acquiesce",meaning:"黙認する・渋々従う",mnemonic:"ac+quiesce(静かになる)→静かに従う",etymology:"ラテン語 acquiescere「休む・満足する」"},
+  {word:"acrimony",meaning:"辛辣さ・敵意",mnemonic:"acri(鋭い)+mony→鋭い言葉の棘",etymology:"ラテン語 acrimonia「刺激・辛さ」"},
+  {word:"acumen",meaning:"洞察力・鋭敏さ",mnemonic:"acu(鋭い)+men→鋭い頭の働き",etymology:"ラテン語 acuere「鋭くする」"},
+  {word:"admonish",meaning:"訓戒する・やさしく叱る",mnemonic:"ad+monish(警告)→警告を向ける",etymology:"ラテン語 admonere「思い出させる」"},
+  {word:"adroit",meaning:"器用な・巧みな",mnemonic:"a+droit(右手・仏語)→右手が器用な",etymology:"フランス語 adroit「右の・巧みな」"},
+  {word:"adulterate",meaning:"混ぜ物で粗悪にする",mnemonic:"adult(大人)+erate→大人のごまかし",etymology:"ラテン語 adulterare「混ぜ物をする」"},
+  {word:"affable",meaning:"愛想のよい・気さくな",mnemonic:"af+fable(話せる)→話しかけやすい",etymology:"ラテン語 affabilis「話しかけやすい」"},
+  {word:"aggrandize",meaning:"権力・地位を拡大する",mnemonic:"ag+grand(大きい)+ize→大きくする",etymology:"フランス語 agrandir「大きくする」"},
+  {word:"alacrity",meaning:"快活さ・機敏さ",mnemonic:"alac(速い)+rity→素早い動き",etymology:"ラテン語 alacritas「活発さ」"},
+  {word:"allay",meaning:"（不安・痛みを）和らげる",mnemonic:"al+lay(置く)→不安を横に置く",etymology:"古英語 alecgan「置き去りにする」"},
+  {word:"alleviate",meaning:"（苦痛を）軽減する",mnemonic:"al+levi(軽い)+ate→軽くする",etymology:"ラテン語 alleviare「軽くする」"},
+  {word:"aloof",meaning:"よそよそしい・超然とした",mnemonic:"a+loof(風上)→風上に離れている",etymology:"オランダ語 loef「風上」"},
+  {word:"altruistic",meaning:"利他的な・無私の",mnemonic:"altr(他者)+uistic→他者のための",etymology:"フランス語 altruisme「利他主義」"},
+  {word:"ambiguous",meaning:"曖昧な・多義的な",mnemonic:"ambi(両方)+guous→両方の意味を持つ",etymology:"ラテン語 ambiguus「どちらにも行ける」"},
+  {word:"ameliorate",meaning:"改善する・好転させる",mnemonic:"melio(より良い)→より良くする",etymology:"ラテン語 melior「より良い」"},
+  {word:"amenable",meaning:"従順な・素直に従う",mnemonic:"a+men(導く)+able→導かれやすい",etymology:"フランス語 amener「連れていく」"},
+  {word:"amiable",meaning:"愛想のよい・友好的な",mnemonic:"ami(友人・仏語)+able→友人になれる",etymology:"ラテン語 amicabilis「友好的な」"},
+  {word:"amorphous",meaning:"不定形の・漠然とした",mnemonic:"a(なし)+morph(形)+ous→形がない",etymology:"ギリシャ語 amorphos「形のない」"},
+  {word:"anachronism",meaning:"時代錯誤・時代遅れ",mnemonic:"ana(逆)+chron(時間)+ism→時間が逆",etymology:"ギリシャ語 anachronismos「時代錯誤」"},
+  {word:"analogous",meaning:"類似した・相似した",mnemonic:"ana(沿って)+log(比率)+ous→比率が合っている",etymology:"ギリシャ語 analogos「比例した」"},
+  {word:"anarchy",meaning:"無政府状態・混乱",mnemonic:"an(なし)+archy(支配)→支配なし",etymology:"ギリシャ語 anarkhia「指導者なし」"},
+  {word:"anodyne",meaning:"苦痛を和らげる・当たり障りのない",mnemonic:"an(なし)+odyne(痛み)→痛みなし",etymology:"ギリシャ語 anodynos「痛みのない」"},
+  {word:"anomaly",meaning:"例外・異常",mnemonic:"an(なし)+omaly(規則)→規則がない",etymology:"ギリシャ語 anomalos「不規則な」"},
+  {word:"antagonize",meaning:"敵対させる・反感を買う",mnemonic:"ant(反対)+agonize(苦しむ)→反対して苦しませる",etymology:"ギリシャ語 antagonizesthai「争う」"},
+  {word:"antithesis",meaning:"正反対・対極",mnemonic:"anti(反対)+thesis(命題)→命題の反対",etymology:"ギリシャ語 antitithenai「対置する」"},
+  {word:"apathy",meaning:"無関心・無感動",mnemonic:"a(なし)+pathy(感情)→感情なし",etymology:"ギリシャ語 apatheia「感情がない」"},
+  {word:"appease",meaning:"なだめる・慰める",mnemonic:"ap+pease(平和)→平和にする",etymology:"古フランス語 apaisier「和らげる」"},
+  {word:"approbation",meaning:"承認・賞賛",mnemonic:"ap+prob(証明)+ation→証明された承認",etymology:"ラテン語 approbare「良いと認める」"},
+  {word:"arcane",meaning:"秘密の・難解な",mnemonic:"arc(箱)→箱の中に秘密が隠れている",etymology:"ラテン語 arcanus「閉じ込められた」"},
+  {word:"arduous",meaning:"骨の折れる・困難な",mnemonic:"ardu(険しい)+ous→険しい道",etymology:"ラテン語 arduus「険しい」"},
+  {word:"arraign",meaning:"法廷に訴える・非難する",mnemonic:"ar+raign(王の前に)→王の前に引き出す",etymology:"古フランス語 araisnier「訴える」"},
+  {word:"arrogant",meaning:"傲慢な・横柄な",mnemonic:"ar+rog(求める)+ant→自分に多くを求める",etymology:"ラテン語 arrogare「自分のものにする」"},
+  {word:"articulate",meaning:"明確に表現する・明瞭な",mnemonic:"artic(関節)+ulate→言葉を関節でつなぐ",etymology:"ラテン語 articulare「はっきり発音する」"},
+  {word:"ascetic",meaning:"禁欲的な・苦行の",mnemonic:"asce(訓練)+tic→訓練のための禁欲",etymology:"ギリシャ語 asketes「修行者」"},
+  {word:"assiduous",meaning:"勤勉な・粘り強い",mnemonic:"ass(お尻)+iduous→お尻を椅子につけて働く",etymology:"ラテン語 assidere「そばに座る」"},
+  {word:"assuage",meaning:"和らげる・癒す",mnemonic:"as+suage(甘い)→甘くして和らげる",etymology:"ラテン語 suavis「甘い・心地よい」"},
+  {word:"astute",meaning:"抜け目ない・賢い",mnemonic:"a+stute(立つ)→先を読んで立っている",etymology:"ラテン語 astutus「賢い」"},
+  {word:"atrophy",meaning:"萎縮する・衰退する",mnemonic:"a(なし)+trophy(栄養)→栄養がなく萎縮",etymology:"ギリシャ語 atrophia「栄養不良」"},
+  {word:"audacious",meaning:"大胆な・向こう見ずな",mnemonic:"auda(聞く・挑む)+cious→何でも挑む",etymology:"ラテン語 audax「大胆な」"},
+  {word:"augment",meaning:"増やす・拡大する",mnemonic:"aug(増やす)+ment→増加させる",etymology:"ラテン語 augere「増やす」"},
+  {word:"auspicious",meaning:"縁起のよい・前途有望な",mnemonic:"auspi(鳥占い)+cious→鳥の飛び方が良い兆し",etymology:"ラテン語 auspicium「鳥占い」"},
+  {word:"austere",meaning:"厳格な・質素な",mnemonic:"aust(乾いた)+ere→乾いた厳しさ",etymology:"ギリシャ語 austeros「乾いた・厳しい」"},
+  {word:"avarice",meaning:"強欲・どん欲",mnemonic:"avar(欲しい)+ice→欲望の氷山",etymology:"ラテン語 avaritia「強欲」"},
+  {word:"avid",meaning:"熱望する・熱狂的な",mnemonic:"av(鳥)+id→鳥のように貪欲に食らいつく",etymology:"ラテン語 avidus「貪欲な」"},
+  {word:"banal",meaning:"陳腐な・ありきたりの",mnemonic:"banal(仏語で平凡)→平凡すぎる",etymology:"フランス語 banal「ありふれた」"},
+  {word:"beguile",meaning:"魅了する・だます",mnemonic:"be+guile(策略)→策略で魅了する",etymology:"古英語 begīlan「だます」"},
+  {word:"belligerent",meaning:"好戦的な・喧嘩腰の",mnemonic:"belli(戦争)+gerent(行う)→戦争を行う",etymology:"ラテン語 bellum「戦争」+gerere「行う」"},
+  {word:"bemoan",meaning:"嘆く・悲しむ",mnemonic:"be+moan(うめく)→うめき声を上げて嘆く",etymology:"古英語 mænan「嘆く」"},
+  {word:"benevolent",meaning:"慈悲深い・親切な",mnemonic:"bene(良い)+volent(望む)→良いことを望む",etymology:"ラテン語 benevolens「善意を持つ」"},
+  {word:"benign",meaning:"親切な・（腫瘍が）良性の",mnemonic:"beni(良い)+gn(生まれ)→良い生まれつき",etymology:"ラテン語 benignus「心優しい」"},
+  {word:"berate",meaning:"激しく叱る・どなりつける",mnemonic:"be+rate(評価)→厳しく評価する",etymology:"be-+rate「叱る」"},
+  {word:"blithe",meaning:"陽気な・無頓着な",mnemonic:"bli(まばたき)+the→まばたきするように軽やか",etymology:"古英語 blithe「陽気な」"},
+  {word:"boisterous",meaning:"騒々しい・元気いっぱいの",mnemonic:"boister(荒れる)+ous→荒れ騒ぐ",etymology:"中英語 boistous「粗野な」"},
+  {word:"bombastic",meaning:"大げさな・誇張した",mnemonic:"bomb(爆弾)+astic→爆発するほど大げさ",etymology:"フランス語 bombaste「詰め物・大げさ」"},
+  {word:"boorish",meaning:"粗野な・田舎っぽい",mnemonic:"boor(農民)+ish→農民のように粗野",etymology:"オランダ語 boer「農民」"},
+  {word:"brevity",meaning:"簡潔さ・短さ",mnemonic:"brev(短い)+ity→短さ",etymology:"ラテン語 brevis「短い」"},
+  {word:"brusque",meaning:"ぶっきらぼうな・無愛想な",mnemonic:"brusk(荒々しい)→荒々しい態度",etymology:"フランス語 brusque「荒々しい」"},
+  {word:"bucolic",meaning:"田園の・牧歌的な",mnemonic:"buco(牛)+lic→牛がいる田園",etymology:"ギリシャ語 boukolikos「牧夫の」"},
+  {word:"burgeon",meaning:"急速に成長する・芽吹く",mnemonic:"burge(芽)+on→芽が出る",etymology:"古フランス語 burjon「芽」"},
+  {word:"camaraderie",meaning:"仲間意識・友情",mnemonic:"camarad(仲間)+erie→仲間との絆",etymology:"フランス語 camarade「仲間」"},
+  {word:"candid",meaning:"率直な・正直な",mnemonic:"cand(白い)+id→白（純粋）な言葉",etymology:"ラテン語 candidus「白い・純粋な」"},
+  {word:"capitulate",meaning:"降伏する・屈服する",mnemonic:"capit(頭)+ulate→頭を下げる",etymology:"ラテン語 capitulare「条件を定める」"},
+  {word:"capricious",meaning:"気まぐれな・変わりやすい",mnemonic:"capri(ヤギ)+cious→ヤギのように跳び回る",etymology:"イタリア語 capriccio「突然の気まぐれ」"},
+  {word:"castigate",meaning:"厳しく批判する・懲らしめる",mnemonic:"casti(純粋にする)+gate→悪を懲らしめる",etymology:"ラテン語 castigare「罰する」"},
+  {word:"caustic",meaning:"腐食性の・辛辣な",mnemonic:"caus(焼く)+tic→焼けるように辛辣",etymology:"ギリシャ語 kaustikos「焼く」"},
+  {word:"censure",meaning:"非難する・叱責する",mnemonic:"cens(評価)+ure→悪い評価をする",etymology:"ラテン語 censura「批判・監察」"},
+  {word:"chicanery",meaning:"詐欺・ごまかし",mnemonic:"chican(ごまかし)+ery→ごまかしの技",etymology:"フランス語 chicaner「言い訳する」"},
+  {word:"circuitous",meaning:"回り道の・遠回しな",mnemonic:"circuit(回路)+ous→回路のように遠回り",etymology:"ラテン語 circuitus「迂回」"},
+  {word:"circumspect",meaning:"慎重な・用心深い",mnemonic:"circum(周り)+spect(見る)→周りをよく見る",etymology:"ラテン語 circumspicere「見回す」"},
+  {word:"clandestine",meaning:"秘密の・隠れた",mnemonic:"clam(隠す)+destine→隠れた運命",etymology:"ラテン語 clandestinus「秘密の」"},
+  {word:"cloying",meaning:"甘すぎて飽きる・くどい",mnemonic:"cloy(詰まらせる)+ing→甘さで詰まってしまう",etymology:"古フランス語 encloyer「釘を刺す」"},
+  {word:"coerce",meaning:"強制する・脅迫する",mnemonic:"co(一緒)+erce(囲む)→囲んで強制する",etymology:"ラテン語 coercere「封じ込める」"},
+  {word:"cogent",meaning:"説得力のある・切れ味のある",mnemonic:"cog(歯車)+ent→歯車のようにかみ合った論理",etymology:"ラテン語 cogere「集める・強制する」"},
+  {word:"commensurate",meaning:"釣り合った・比例した",mnemonic:"com+mensur(測る)+ate→測って釣り合わせる",etymology:"ラテン語 commensurate「同じ大きさにする」"},
+  {word:"complacent",meaning:"自己満足した・現状に甘んじる",mnemonic:"com+placent(満足)→完全に満足しきっている",etymology:"ラテン語 complacere「大いに喜ぶ」"},
+  {word:"condescending",meaning:"見下した・恩着せがましい",mnemonic:"con+descend(降りる)→高みから降りてくる態度",etymology:"ラテン語 descendere「降りる」"},
+  {word:"conflagration",meaning:"大火災・大規模な紛争",mnemonic:"con+flagr(炎)+ation→炎が広がる大火災",etymology:"ラテン語 conflagrare「燃え上がる」"},
+  {word:"congenial",meaning:"気の合う・性格が合う",mnemonic:"con(一緒)+genial(生まれ)→同じ生まれで気が合う",etymology:"ラテン語 congenialis「同じ性質の」"},
+  {word:"connive",meaning:"黙認する・共謀する",mnemonic:"con(一緒)+nive(目をつぶる)→目をつぶって共謀",etymology:"ラテン語 connivere「目をつぶる」"},
+  {word:"conspicuous",meaning:"目立つ・明白な",mnemonic:"con+spic(見る)+uous→よく見える",etymology:"ラテン語 conspicere「見渡す」"},
+  {word:"contentious",meaning:"議論を呼ぶ・口論好きな",mnemonic:"content(内容)+ious→内容が争いを生む",etymology:"ラテン語 contendere「争う」"},
+  {word:"contrite",meaning:"深く後悔した・悔悟した",mnemonic:"con+trite(こすられた)→心がこすられて後悔",etymology:"ラテン語 contritus「打ち砕かれた」"},
+  {word:"convoluted",meaning:"複雑な・込み入った",mnemonic:"con+volut(巻く)+ed→巻き込まれた複雑さ",etymology:"ラテン語 convolutus「巻かれた」"},
+  {word:"copious",meaning:"豊富な・多量の",mnemonic:"copi(豊か)+ous→豊かにある",etymology:"ラテン語 copia「豊富」"},
+  {word:"corroborate",meaning:"裏付ける・確証する",mnemonic:"cor+robor(強い)+ate→強く確かめる",etymology:"ラテン語 roborare「強くする」"},
+  {word:"credulous",meaning:"信じやすい・だまされやすい",mnemonic:"cred(信じる)+ulous→すぐ信じる",etymology:"ラテン語 credulus「信じやすい」"},
+  {word:"culpable",meaning:"有罪の・過失のある",mnemonic:"culp(罪)+able→罪を問われる",etymology:"ラテン語 culpa「罪・過失」"},
+  {word:"cupidity",meaning:"強欲・貪欲",mnemonic:"cupid(キューピッド)+ity→キューピッドのように欲張り",etymology:"ラテン語 cupiditas「欲望」"},
+  {word:"cursory",meaning:"大急ぎの・ぞんざいな",mnemonic:"curs(走る)+ory→走り抜けるような速さ",etymology:"ラテン語 cursor「走る人」"},
+  {word:"daunt",meaning:"気力をくじく・怖気づかせる",mnemonic:"ダウント→ダウンさせる気持ち",etymology:"古フランス語 danter「制圧する」"},
+  {word:"debacle",meaning:"大失敗・崩壊・惨敗",mnemonic:"de+bacle(障害物)→障害物が崩れる大惨事",etymology:"フランス語 débâcler「解き放つ」"},
+  {word:"decry",meaning:"公然と非難する・けなす",mnemonic:"de+cry(叫ぶ)→叫んで非難する",etymology:"フランス語 décrier「けなす」"},
+  {word:"deference",meaning:"敬意・従順・謙遜",mnemonic:"defer(先送り)+ence→相手を先にする敬意",etymology:"ラテン語 deferre「運んでいく」"},
+  {word:"defunct",meaning:"廃止された・死んだ",mnemonic:"de+funct(機能)→機能しなくなった",etymology:"ラテン語 defunctus「役目を終えた」"},
+  {word:"denigrate",meaning:"けなす・中傷する",mnemonic:"de+nigr(黒)+ate→黒く塗りつぶす",etymology:"ラテン語 denigrare「黒くする」"},
+  {word:"depraved",meaning:"堕落した・腐敗した",mnemonic:"de+praved(曲がった)→曲がって堕落した",etymology:"ラテン語 depravare「曲げる」"},
+  {word:"derelict",meaning:"放棄された・怠慢な",mnemonic:"de+relict(残された)→残されて放棄された",etymology:"ラテン語 derelictus「見捨てられた」"},
+  {word:"destitute",meaning:"極貧の・欠乏した",mnemonic:"de(完全に)+stitute(置く)→何も置かれていない",etymology:"ラテン語 destituere「捨て去る」"},
+  {word:"deterrent",meaning:"抑止力・防止手段",mnemonic:"deter(思いとどまらせる)+rent→抑止するもの",etymology:"ラテン語 deterrere「怖がらせて遠ざける」"},
+  {word:"devious",meaning:"ずる賢い・遠回りの",mnemonic:"de+via(道)+ous→道を外れた",etymology:"ラテン語 devius「道を外れた」"},
+  {word:"didactic",meaning:"教訓的な・説教がましい",mnemonic:"didact(教える)+ic→教えるような",etymology:"ギリシャ語 didaktikos「教えることができる」"},
+  {word:"diffident",meaning:"自信のない・内気な",mnemonic:"dif+fident(信頼)→信頼が欠けている",etymology:"ラテン語 diffidere「信頼しない」"},
+  {word:"dilettante",meaning:"素人愛好家・生半可な",mnemonic:"dilett(楽しむ)+ante→楽しむだけの素人",etymology:"イタリア語 dilettare「楽しむ」"},
+  {word:"discern",meaning:"識別する・見極める",mnemonic:"dis+cern(ふるい分け)→ふるいにかけて見分ける",etymology:"ラテン語 discernere「分ける」"},
+  {word:"discomfit",meaning:"当惑させる・くじく",mnemonic:"dis+comfit(完成)→完成をくじく",etymology:"古フランス語 desconfire「打ち負かす」"},
+  {word:"disparate",meaning:"全く異なる・本質的に違う",mnemonic:"dis+par(等しい)+ate→等しくない",etymology:"ラテン語 disparare「分離する」"},
+  {word:"dispassionate",meaning:"冷静な・感情に左右されない",mnemonic:"dis+passion(情熱)+ate→情熱がない冷静さ",etymology:"dis-+passion「情熱」"},
+  {word:"dissemble",meaning:"本心を隠す・偽る",mnemonic:"dis+semble(似せる)→似せてごまかす",etymology:"ラテン語 dissimulare「隠す」"},
+  {word:"divisive",meaning:"分裂を招く・対立を生む",mnemonic:"divis(分割)+ive→分割を引き起こす",etymology:"ラテン語 dividere「分ける」"},
+  {word:"dubious",meaning:"疑わしい・曖昧な",mnemonic:"dub(疑う)+ious→疑わしい",etymology:"ラテン語 dubius「二つの方向に揺れる」"},
+  {word:"duplicity",meaning:"二枚舌・表裏のある行為",mnemonic:"duplic(二重)+ity→二重の顔",etymology:"ラテン語 duplicitas「二重性」"},
+  {word:"ebullient",meaning:"熱狂的な・はつらつとした",mnemonic:"e+bull(沸騰)+ient→沸き立つ元気さ",etymology:"ラテン語 ebullire「沸き立つ」"},
+  {word:"eccentric",meaning:"風変わりな・奇抜な",mnemonic:"ec(外)+centric(中心)→中心から外れた",etymology:"ギリシャ語 ekkentros「中心外れの」"},
+  {word:"egregious",meaning:"言語道断な・目に余る",mnemonic:"e+greg(群れ)+ious→群れから飛び出るほど悪い",etymology:"ラテン語 egregius「群れから抜け出た」"},
+  {word:"elegy",meaning:"哀歌・挽歌",mnemonic:"ele(悲しい)+gy→悲しみの歌",etymology:"ギリシャ語 elegeia「哀歌」"},
+  {word:"elicit",meaning:"引き出す・誘発する",mnemonic:"e+licit(引き出す)→外に引き出す",etymology:"ラテン語 elicere「引き出す」"},
+  {word:"eloquent",meaning:"雄弁な・説得力のある",mnemonic:"e+loqu(話す)+ent→よく話す",etymology:"ラテン語 eloqui「はっきり話す」"},
+  {word:"elusive",meaning:"とらえにくい・難解な",mnemonic:"e+lus(遊ぶ)+ive→逃げ回って捕まらない",etymology:"ラテン語 eludere「かわす」"},
+  {word:"emulate",meaning:"見習う・模倣する",mnemonic:"emu(エミュー)+late→エミューのように真似る",etymology:"ラテン語 aemulari「競争する」"},
+  {word:"endemic",meaning:"（地域・集団に）固有の",mnemonic:"en+dem(人々)+ic→その地の人々の",etymology:"ギリシャ語 endemos「国内の」"},
+  {word:"enervate",meaning:"気力を奪う・弱らせる",mnemonic:"e+nerv(神経)+ate→神経を抜き取る",etymology:"ラテン語 enervare「腱を切る」"},
+  {word:"enigmatic",meaning:"謎めいた・不可解な",mnemonic:"enigm(謎)+atic→謎のような",etymology:"ギリシャ語 ainigma「謎」"},
+  {word:"ephemeral",meaning:"短命な・はかない",mnemonic:"epi+hemer(日)+al→一日だけの",etymology:"ギリシャ語 ephemeros「一日だけ生きる」"},
+  {word:"equivocate",meaning:"曖昧に言う・言葉を濁す",mnemonic:"equi(等しい)+voc(声)+ate→どちらとも取れる声",etymology:"ラテン語 aequivocus「二重の意味を持つ」"},
+  {word:"eradicate",meaning:"根絶する・撲滅する",mnemonic:"e+radic(根)+ate→根を引き抜く",etymology:"ラテン語 eradicare「根こそぎにする」"},
+  {word:"esoteric",meaning:"難解な・一部にしか理解されない",mnemonic:"eso(内側)+teric→内側の人だけ知っている",etymology:"ギリシャ語 esoterikos「内側の」"},
+  {word:"exacerbate",meaning:"悪化させる・さらにひどくする",mnemonic:"ex+acerb(酸っぱい・辛い)+ate→さらに苦くする",etymology:"ラテン語 exacerbare「苛立たせる」"},
+  {word:"exculpate",meaning:"無罪にする・釈放する",mnemonic:"ex+culp(罪)+ate→罪から出す",etymology:"ラテン語 exculpare「罪から解放する」"},
+  {word:"execrable",meaning:"極めて悪い・憎むべき",mnemonic:"execr(呪う)+able→呪われるほど悪い",etymology:"ラテン語 execrari「呪う」"},
+  {word:"exigent",meaning:"緊急の・要求の多い",mnemonic:"exig(要求する)+ent→要求する",etymology:"ラテン語 exigere「要求する」"},
+  {word:"expedient",meaning:"便宜的な・都合のよい",mnemonic:"ex+ped(足)+ient→足が自由な便宜的行動",etymology:"ラテン語 expedire「解き放つ」"},
+  {word:"fastidious",meaning:"几帳面な・口やかましい",mnemonic:"fast(速く)+idious→速く済ませたいほど細かい",etymology:"ラテン語 fastidium「嫌悪・うんざり」"},
+  {word:"fatuous",meaning:"愚かな・空虚な",mnemonic:"fatu(愚か)+ous→愚かな",etymology:"ラテン語 fatuus「愚かな」"},
+  {word:"fervent",meaning:"熱烈な・熱心な",mnemonic:"ferv(沸騰)+ent→沸き立つような熱意",etymology:"ラテン語 fervere「沸く・燃える」"},
+  {word:"fickle",meaning:"気まぐれな・不安定な",mnemonic:"fick(変わる)+le→くるくる変わる",etymology:"古英語 ficol「だましやすい」"},
+  {word:"flagrant",meaning:"目に余る・はなはだしい",mnemonic:"flagr(燃える)+ant→燃え上がるほど明白な悪",etymology:"ラテン語 flagrare「燃える」"},
+  {word:"fledgling",meaning:"駆け出しの・経験の浅い",mnemonic:"fledge(羽が生える)+ling→羽が生えたばかりのひな鳥",etymology:"古英語 flycge「羽が生えた」"},
+  {word:"flippant",meaning:"軽薄な・不謹慎な",mnemonic:"flip(はじく)+pant→軽くはじくような態度",etymology:"おそらく flip「ぱちんと打つ」から"},
+  {word:"flout",meaning:"あざ笑う・無視する",mnemonic:"flout(笛を吹く)→笛を吹いてあざ笑う",etymology:"オランダ語 fluiten「笛を吹く」"},
+  {word:"foment",meaning:"（不和・反乱を）煽る",mnemonic:"fo+ment(心)→心を煽り立てる",etymology:"ラテン語 fomentum「温湿布」"},
+  {word:"forbearance",meaning:"忍耐・自制",mnemonic:"for+bear(耐える)+ance→耐え続ける力",etymology:"古英語 forberan「我慢する」"},
+  {word:"fortuitous",meaning:"偶然の・幸運な",mnemonic:"fortu(運)+itous→運による偶然",etymology:"ラテン語 fortuitus「偶然の」"},
+  {word:"fractious",meaning:"扱いにくい・反抗的な",mnemonic:"fract(壊す)+ious→壊れそうに扱いにくい",etymology:"ラテン語 frangere「壊す」"},
+  {word:"furtive",meaning:"こそこそした・内緒の",mnemonic:"fur(泥棒)+tive→泥棒のように隠れて",etymology:"ラテン語 furtivus「こっそりした」"},
+  {word:"garrulous",meaning:"おしゃべりな・くどい",mnemonic:"garr(がーがー)+ulous→がーがーしゃべる",etymology:"ラテン語 garrulus「おしゃべりな」"},
+  {word:"glib",meaning:"口先だけの・口達者な",mnemonic:"glib(滑る)→言葉が滑らかすぎる",etymology:"低地ドイツ語 glibberig「滑りやすい」"},
+  {word:"gregarious",meaning:"社交的な・群れを好む",mnemonic:"greg(群れ)+arious→群れを好む",etymology:"ラテン語 grex「群れ・仲間」"},
+  {word:"guile",meaning:"狡猾さ・策略",mnemonic:"guile(策略)→巧妙な策略",etymology:"古フランス語 guile「欺き」"},
+  {word:"harangue",meaning:"熱弁・怒りの長演説",mnemonic:"haran(囲み)+gue→囲まれた中での演説",etymology:"古フランス語 harangue「大演説」"},
+  {word:"harbinger",meaning:"前兆・先触れ",mnemonic:"harbor(港)+inger→港を先に調べる人",etymology:"古フランス語 herbergier「宿を取る」"},
+  {word:"harrowing",meaning:"痛ましい・つらい",mnemonic:"harrow(馬鍬で耕す)→心を掻き乱す",etymology:"古英語 hergian「略奪する」"},
+  {word:"hegemony",meaning:"覇権・支配権",mnemonic:"hege(指導)+mony→指導権",etymology:"ギリシャ語 hegemon「指導者」"},
+  {word:"heresy",meaning:"異端・異説",mnemonic:"here(ここ)+sy→ここだけ違う考え",etymology:"ギリシャ語 hairesis「選択・宗派」"},
+  {word:"hubris",meaning:"傲慢・自惚れ（神への挑戦）",mnemonic:"hu(高い)+bris→高すぎる誇り",etymology:"ギリシャ語 hybris「傲慢・無礼」"},
+  {word:"idiosyncratic",meaning:"独特な・風変わりな",mnemonic:"idio(自分)+sync(混合)→自分だけのブレンド",etymology:"ギリシャ語 idiosynkrasia「個人の体質」"},
+  {word:"ignoble",meaning:"卑しい・恥ずべき",mnemonic:"ig+noble(高貴)→高貴でない",etymology:"ラテン語 ignobilis「低い身分の」"},
+  {word:"ignominious",meaning:"不名誉な・恥ずかしい",mnemonic:"ig+nomin(名前)+ious→名前が汚れた",etymology:"ラテン語 ignominia「不名誉」"},
+  {word:"immutable",meaning:"不変の・変えられない",mnemonic:"im(不)+mutable(変わる)→変わらない",etymology:"ラテン語 immutabilis「変えられない」"},
+  {word:"impetuous",meaning:"衝動的な・性急な",mnemonic:"im+pet(攻撃)+uous→勢いよく突き進む",etymology:"ラテン語 impetere「突撃する」"},
+  {word:"implacable",meaning:"なだめられない・執念深い",mnemonic:"im+plac(穏やか)+able→穏やかにできない",etymology:"ラテン語 implacabilis「和解できない」"},
+  {word:"impudent",meaning:"厚かましい・生意気な",mnemonic:"im+pud(恥)+ent→恥を知らない",etymology:"ラテン語 impudens「恥知らずの」"},
+  {word:"incessant",meaning:"絶え間ない・ひっきりなしの",mnemonic:"in+cess(止まる)+ant→止まらない",etymology:"ラテン語 incessans「止まらない」"},
+  {word:"incipient",meaning:"初期の・始まりかけの",mnemonic:"inci(始まる)+pient→始まりかけた",etymology:"ラテン語 incipere「始める」"},
+  {word:"incongruous",meaning:"不釣り合いな・場違いな",mnemonic:"in+con+gru(一致)+ous→一致しない",etymology:"ラテン語 incongruus「不一致の」"},
+  {word:"indolent",meaning:"怠惰な・無精な",mnemonic:"in+dol(痛み)+ent→痛みを感じないほど動かない",etymology:"ラテン語 indolens「苦痛を感じない」"},
+  {word:"inexorable",meaning:"容赦ない・避けられない",mnemonic:"in+exor(懇願)+able→懇願しても動じない",etymology:"ラテン語 inexorabilis「説得できない」"},
+  {word:"ingenuous",meaning:"無邪気な・素直な",mnemonic:"in+gen(生まれ)+uous→生まれつき純粋な",etymology:"ラテン語 ingenuus「自由生まれの・率直な」"},
+  {word:"inimical",meaning:"有害な・敵対的な",mnemonic:"inim(敵)+ical→敵のような",etymology:"ラテン語 inimicus「敵」"},
+  {word:"insolent",meaning:"横柄な・無礼な",mnemonic:"in+sol(慣れ)+ent→慣れていない礼儀",etymology:"ラテン語 insolens「慣れていない・傲慢な」"},
+  {word:"insular",meaning:"偏狭な・島国根性の",mnemonic:"insul(島)+ar→島のように孤立した",etymology:"ラテン語 insula「島」"},
+  {word:"intransigent",meaning:"妥協しない・頑固な",mnemonic:"in+transig(妥協)+ent→妥協しない",etymology:"スペイン語 intransigente「妥協しない」"},
+  {word:"intrepid",meaning:"勇敢な・大胆な",mnemonic:"in+trepid(怯える)→怯えない",etymology:"ラテン語 intrepidus「恐れを知らない」"},
+  {word:"inveterate",meaning:"根深い・染みついた",mnemonic:"in+veter(古い)+ate→古くから染みついた",etymology:"ラテン語 inveterare「古くなる」"},
+  {word:"irascible",meaning:"怒りっぽい・短気な",mnemonic:"iras(怒り)+cible→怒りやすい",etymology:"ラテン語 irasci「怒る」"},
+  {word:"laconic",meaning:"簡潔な・無口な",mnemonic:"Laconia(スパルタの地名)→スパルタ式の簡潔さ",etymology:"ギリシャ語 Lakonikos「スパルタ人の」"},
+  {word:"languid",meaning:"ぐったりした・無気力な",mnemonic:"lang(長い)+uid→長々とだらける",etymology:"ラテン語 languere「衰弱する」"},
+  {word:"laud",meaning:"称賛する・たたえる",mnemonic:"laud(賞賛)→ラウドに賛える",etymology:"ラテン語 laudare「賞賛する」"},
+  {word:"loquacious",meaning:"おしゃべりな・多弁な",mnemonic:"loqu(話す)+acious→よく話す",etymology:"ラテン語 loquax「おしゃべり」"},
+  {word:"lugubrious",meaning:"陰気な・もの悲しい",mnemonic:"lugubri(嘆き)+ous→嘆かわしい",etymology:"ラテン語 lugubris「喪に服した」"},
+  {word:"malevolent",meaning:"悪意のある・意地悪な",mnemonic:"male(悪)+volent(望む)→悪を望む",etymology:"ラテン語 malevolens「悪意を持つ」"},
+  {word:"malleable",meaning:"従順な・柔軟な・加工しやすい",mnemonic:"mall(ハンマー)+eable→ハンマーで叩けば形が変わる",etymology:"ラテン語 malleus「ハンマー」"},
+  {word:"mendacious",meaning:"嘘をつく・不正直な",mnemonic:"mend(嘘)+acious→嘘をつく",etymology:"ラテン語 mendax「嘘つき」"},
+  {word:"mercurial",meaning:"気まぐれな・素早い",mnemonic:"mercury(水銀)→水銀のように変わりやすい",etymology:"ローマ神 Mercurius（速さの神）"},
+  {word:"meticulous",meaning:"細心の注意を払う・几帳面な",mnemonic:"meti+cul(小さい)+ous→細かいことまで気にする",etymology:"ラテン語 meticulosus「恐れを感じる」"},
+  {word:"misanthrope",meaning:"人間嫌い",mnemonic:"mis(嫌い)+anthrope(人間)→人間嫌い",etymology:"ギリシャ語 misanthropos「人間嫌い」"},
+  {word:"mitigate",meaning:"和らげる・軽減する",mnemonic:"miti(穏やか)+gate→穏やかな門を通す",etymology:"ラテン語 mitigare「柔らかくする」"},
+  {word:"mollify",meaning:"なだめる・和らげる",mnemonic:"molli(柔らかい)+fy→柔らかくする",etymology:"ラテン語 mollire「柔らかくする」"},
+  {word:"morose",meaning:"不機嫌な・陰気な",mnemonic:"mor(暗い)+ose→暗い顔",etymology:"ラテン語 morosus「気難しい」"},
+  {word:"munificent",meaning:"気前のよい・寛大な",mnemonic:"muni(贈り物)+ficent(作る)→贈り物をたくさん作る",etymology:"ラテン語 munificus「気前のよい」"},
+  {word:"nefarious",meaning:"極悪非道な・邪悪な",mnemonic:"ne(否定)+far(法律)+ious→法を否定する",etymology:"ラテン語 nefarius「不法な」"},
+  {word:"nonchalant",meaning:"無関心な・涼しい顔をした",mnemonic:"non+chalant(熱い)→熱くならない",etymology:"フランス語 nonchaloir「気にしない」"},
+  {word:"obdurate",meaning:"頑固な・強情な",mnemonic:"ob+dur(硬い)+ate→硬くて動かない",etymology:"ラテン語 obdurare「硬くなる」"},
+  {word:"obsequious",meaning:"ご機嫌取りの・媚びへつらう",mnemonic:"ob+sequ(従う)+ious→従い過ぎる",etymology:"ラテン語 obsequium「従順」"},
+  {word:"obstinate",meaning:"頑固な・強情な",mnemonic:"ob+stin(立つ)+ate→立ちふさがる",etymology:"ラテン語 obstinare「断固とする」"},
+  {word:"obtuse",meaning:"鈍い・理解が遅い",mnemonic:"ob+tuse(鈍角)→鈍角のように鈍い",etymology:"ラテン語 obtusus「鈍い」"},
+  {word:"odious",meaning:"憎むべき・不快な",mnemonic:"od(嫌悪)+ious→嫌悪感を与える",etymology:"ラテン語 odiosus「憎むべき」"},
+  {word:"ominous",meaning:"不吉な・前兆となる",mnemonic:"omin(前兆)+ous→不吉な前兆",etymology:"ラテン語 omen「前兆・兆し」"},
+  {word:"onerous",meaning:"重荷な・骨の折れる",mnemonic:"oner(重荷)+ous→重荷",etymology:"ラテン語 onus「重荷・負担」"},
+  {word:"opprobrious",meaning:"不名誉な・侮辱的な",mnemonic:"op+probri(恥)+ous→恥を与える",etymology:"ラテン語 opprobrium「恥辱」"},
+  {word:"ostentatious",meaning:"見せびらかす・派手な",mnemonic:"ostent(見せる)+atious→見せびらかす",etymology:"ラテン語 ostentare「ひけらかす」"},
+  {word:"palpable",meaning:"明白な・触れられる",mnemonic:"palp(触る)+able→触れられるほど明白",etymology:"ラテン語 palpare「触れる」"},
+  {word:"parochial",meaning:"偏狭な・地域限定の",mnemonic:"paroch(教区)+ial→教区内だけを見る",etymology:"ラテン語 parochia「教区」"},
+  {word:"parsimonious",meaning:"けちな・倹約な",mnemonic:"parsimoni(倹約)+ous→倹約しすぎる",etymology:"ラテン語 parsimonia「節約」"},
+  {word:"partisan",meaning:"党派的な・熱烈な支持者",mnemonic:"parti(党)+san→党の人",etymology:"フランス語 partisan「党派の支持者」"},
+  {word:"pedantic",meaning:"衒学的な・学問ぶった",mnemonic:"ped(教師)+antic→教師ぶった態度",etymology:"イタリア語 pedante「教師ぶった人」"},
+  {word:"penchant",meaning:"強い傾向・好み",mnemonic:"pen+chant(歌う)→歌うほど好き",etymology:"フランス語 pencher「傾く」"},
+  {word:"perfidious",meaning:"不誠実な・裏切りの",mnemonic:"per+fid(信頼)+ious→信頼を裏切る",etymology:"ラテン語 perfidus「不誠実な」"},
+  {word:"pernicious",meaning:"有害な・致命的な",mnemonic:"per+nici(破壊)+ous→完全に破壊する",etymology:"ラテン語 pernicies「破滅・死」"},
+  {word:"petulant",meaning:"怒りっぽい・気難しい",mnemonic:"pet(ペット)+ulant→しつけられていないペットのような",etymology:"ラテン語 petulans「生意気な」"},
+  {word:"placate",meaning:"なだめる・機嫌を取る",mnemonic:"plac(穏やか)+ate→穏やかにする",etymology:"ラテン語 placare「鎮める」"},
+  {word:"platitude",meaning:"陳腐な言葉・決まり文句",mnemonic:"plati(平ら)+tude→平板な言葉",etymology:"フランス語 platitude「平凡さ」"},
+  {word:"plausible",meaning:"もっともらしい・信憑性がある",mnemonic:"plaus(拍手)+ible→拍手してしまうほどそれらしい",etymology:"ラテン語 plaudere「拍手する」"},
+  {word:"polemic",meaning:"論争・論争的な",mnemonic:"polem(戦争)+ic→言葉の戦争",etymology:"ギリシャ語 polemikos「戦争の」"},
+  {word:"pragmatic",meaning:"実用的な・実践的な",mnemonic:"pragma(行為)+tic→実際の行為に基づく",etymology:"ギリシャ語 pragma「行為・事柄」"},
+  {word:"precarious",meaning:"不安定な・危険な",mnemonic:"prec(祈り)+arious→神頼みの不安定さ",etymology:"ラテン語 precarius「祈りによって得られた」"},
+  {word:"predilection",meaning:"好み・偏愛",mnemonic:"pre+dilect(好む)+ion→前もって好んでいる",etymology:"ラテン語 praediligere「特別に好む」"},
+  {word:"prevaricate",meaning:"言葉を濁す・ごまかす",mnemonic:"pre+varic(曲がり)+ate→曲がりくねった話し方",etymology:"ラテン語 praevaricari「曲がって歩く」"},
+  {word:"procrastinate",meaning:"先延ばしにする・ぐずぐずする",mnemonic:"pro+cras(明日)+tinate→明日に先送り",etymology:"ラテン語 procrastinare「明日に延期する」"},
+  {word:"profligate",meaning:"放蕩な・浪費する",mnemonic:"pro+flig(打ち倒す)+ate→打ち倒された道徳",etymology:"ラテン語 profligare「打ち倒す」"},
+  {word:"prolific",meaning:"多産な・多作な",mnemonic:"pro+lific(生む)→たくさん生み出す",etymology:"ラテン語 proles「子孫」+facere「作る」"},
+  {word:"propitious",meaning:"好都合な・幸先のよい",mnemonic:"propi+tious→近づきやすい好条件",etymology:"ラテン語 propitius「好意的な」"},
+  {word:"prosaic",meaning:"散文的な・平凡な",mnemonic:"pros(散文)+aic→詩でなく散文のような平凡さ",etymology:"ラテン語 prosa「散文」"},
+  {word:"provincial",meaning:"地方的な・偏狭な",mnemonic:"province(地方)+ial→地方に閉じこもった",etymology:"ラテン語 provincia「属州・地方」"},
+  {word:"prudent",meaning:"思慮深い・慎重な",mnemonic:"pru+dent(歯)→歯で噛んで慎重に考える",etymology:"ラテン語 prudens「賢い」"},
+  {word:"puerile",meaning:"子供っぽい・幼稚な",mnemonic:"puer(少年)+ile→少年のような幼稚さ",etymology:"ラテン語 puerilis「子供の」"},
+  {word:"punctilious",meaning:"規則を厳守する・几帳面な",mnemonic:"punctili(細かい点)+ous→細かい点にこだわる",etymology:"イタリア語 puntiglio「細かいこと」"},
+  {word:"querulous",meaning:"不平を言う・ぶつぶつ言う",mnemonic:"quer(文句)+ulous→文句が多い",etymology:"ラテン語 querulus「嘆き悲しむ」"},
+  {word:"quixotic",meaning:"夢想的な・非現実的な",mnemonic:"quixot(ドン・キホーテ)+ic→ドン・キホーテのような",etymology:"小説 Don Quixote の主人公から"},
+  {word:"recalcitrant",meaning:"頑固に反抗する・手に負えない",mnemonic:"re+calcitrant(蹴る)→蹴り返す",etymology:"ラテン語 recalcitrare「蹴り返す」"},
+  {word:"recondite",meaning:"難解な・あまり知られていない",mnemonic:"re+condit(隠す)+e→隠されている知識",etymology:"ラテン語 recondere「しまう」"},
+  {word:"redolent",meaning:"香りのする・強く思わせる",mnemonic:"red+ol(香り)+ent→香りが漂う",etymology:"ラテン語 redolere「香る」"},
+  {word:"remonstrate",meaning:"抗議する・諫める",mnemonic:"re+monstr(示す)+ate→示して抗議する",etymology:"ラテン語 remonstrare「示す」"},
+  {word:"repudiate",meaning:"拒否する・否定する",mnemonic:"re+pudi(恥)+ate→恥として拒否する",etymology:"ラテン語 repudiare「拒絶する」"},
+  {word:"reticent",meaning:"無口な・口数の少ない",mnemonic:"reti(網)+cent→言葉を網で捕まえておく",etymology:"ラテン語 reticere「黙る」"},
+  {word:"rhetoric",meaning:"修辞・雄弁術",mnemonic:"rhet(話す)+oric→話す技術",etymology:"ギリシャ語 rhetorike「弁論術」"},
+  {word:"sanctimonious",meaning:"独善的な・信心深ぶった",mnemonic:"sancti(神聖)+monious→神聖ぶった",etymology:"ラテン語 sanctimonia「神聖さ」"},
+  {word:"sardonic",meaning:"冷笑的な・皮肉な",mnemonic:"sard(苦い草)+onic→苦い笑い",etymology:"ギリシャ語 sardonios「苦々しい笑い」"},
+  {word:"scrupulous",meaning:"誠実な・良心的な・細心の",mnemonic:"scrup(小石)+ulous→小石を踏んでも気になるほど細心",etymology:"ラテン語 scrupulus「小石・不安」"},
+  {word:"serendipity",meaning:"幸運な偶然・棚ぼた",mnemonic:"serend(おとぎ話の国)+ipity→偶然の幸運",etymology:"ペルシャのおとぎ話の国「セレンディップ」から"},
+  {word:"soporific",meaning:"眠気を誘う・退屈な",mnemonic:"sopor(眠り)+ific→眠りを引き起こす",etymology:"ラテン語 sopor「深い眠り」"},
+  {word:"spurious",meaning:"偽りの・にせの",mnemonic:"spur(にせ)+ious→偽物",etymology:"ラテン語 spurius「私生児の・偽の」"},
+  {word:"stolid",meaning:"感情を表さない・鈍感な",mnemonic:"stol(鈍い)+id→鈍い感情",etymology:"ラテン語 stolidus「鈍感な」"},
+  {word:"strident",meaning:"耳障りな・騒々しい",mnemonic:"strid(きしむ音)+ent→きしむような騒音",etymology:"ラテン語 stridere「ぎーぎー鳴る」"},
+  {word:"subservient",meaning:"従属的な・卑屈な",mnemonic:"sub(下)+serv(仕える)+ient→下に仕える",etymology:"ラテン語 subservire「下で仕える」"},
+  {word:"surreptitious",meaning:"こそこそした・秘密の",mnemonic:"surr+ept(取る)+itious→こっそり取る",etymology:"ラテン語 surripere「こっそり取る」"},
+  {word:"sycophant",meaning:"ごますり・媚びへつらう人",mnemonic:"syco(イチジク)+phant(示す)→告げ口屋",etymology:"ギリシャ語 sykophantes「告げ口屋」"},
+  {word:"tacit",meaning:"暗黙の・口に出さない",mnemonic:"taci(黙っている)+t→黙認",etymology:"ラテン語 tacere「黙る」"},
+  {word:"tangential",meaning:"本題から外れた・接線的な",mnemonic:"tangent(接線)+ial→接線のように外れている",etymology:"ラテン語 tangere「触れる」"},
+  {word:"tenacious",meaning:"粘り強い・固執する",mnemonic:"ten(持つ)+acious→しっかり持ち続ける",etymology:"ラテン語 tenax「しっかり持つ」"},
+  {word:"terse",meaning:"簡潔な・ぶっきらぼうな",mnemonic:"ter(切る)+se→切り詰めた言葉",etymology:"ラテン語 tersus「磨かれた」"},
+  {word:"torpid",meaning:"無気力な・鈍い",mnemonic:"torp(しびれ)+id→しびれたように動けない",etymology:"ラテン語 torpere「しびれる」"},
+  {word:"tractable",meaning:"従順な・扱いやすい",mnemonic:"tract(引く)+able→引っ張れる",etymology:"ラテン語 tractare「扱う」"},
+  {word:"transient",meaning:"一時的な・はかない",mnemonic:"trans(通過)+ient→通り過ぎる",etymology:"ラテン語 transire「通り過ぎる」"},
+  {word:"truculent",meaning:"好戦的な・獰猛な",mnemonic:"trucul(残忍)+ent→残忍な",etymology:"ラテン語 truculentus「荒々しい」"},
+  {word:"turbulent",meaning:"荒れた・激動の",mnemonic:"turb(かき乱す)+ulent→かき乱された",etymology:"ラテン語 turbare「かき乱す」"},
+  {word:"ubiquitous",meaning:"どこにでもある・遍在する",mnemonic:"ubi(どこ)+quitous→どこにでもいる",etymology:"ラテン語 ubique「どこでも」"},
+  {word:"umbrage",meaning:"立腹・気分を害すること",mnemonic:"umbr(影)+age→影を落とす怒り",etymology:"ラテン語 umbra「影」"},
+  {word:"vacillate",meaning:"ためらう・動揺する",mnemonic:"vacill(揺れる)+ate→揺れ動く",etymology:"ラテン語 vacillare「よろめく」"},
+  {word:"venerate",meaning:"崇拝する・尊敬する",mnemonic:"vener(Venus愛の女神)+ate→女神のように崇める",etymology:"ラテン語 venerari「崇拝する」"},
+  {word:"verbose",meaning:"冗長な・くどい",mnemonic:"verb(言葉)+ose→言葉が多すぎる",etymology:"ラテン語 verbosus「言葉の多い」"},
+  {word:"vicarious",meaning:"代理の・間接的な",mnemonic:"vicar(代理)+ious→代理の",etymology:"ラテン語 vicarius「代理の」"},
+  {word:"vilify",meaning:"中傷する・けなす",mnemonic:"vili(卑しい)+fy→卑しくする",etymology:"ラテン語 vilis「卑しい」"},
+  {word:"vindictive",meaning:"復讐心の強い・意地悪な",mnemonic:"vindic(復讐)+tive→復讐心がある",etymology:"ラテン語 vindicare「主張する・復讐する」"},
+  {word:"volatile",meaning:"揮発性の・不安定な",mnemonic:"volat(飛ぶ)+ile→すぐ飛んでしまう",etymology:"ラテン語 volare「飛ぶ」"},
+  {word:"voracious",meaning:"貪欲な・大食いの",mnemonic:"vor(飲み込む)+acious→何でも飲み込む",etymology:"ラテン語 vorare「飲み込む」"},
+  {word:"wanton",meaning:"恣意的な・無節操な",mnemonic:"wan(欠けた)+ton→規律が欠けた",etymology:"古英語 wantowen「訓練されていない」"},
+  {word:"wary",meaning:"用心深い・慎重な",mnemonic:"war(危険)+y→危険に気づいている",etymology:"古英語 waer「注意深い」"},
+  {word:"whimsical",meaning:"気まぐれな・風変わりな",mnemonic:"whim(気まぐれ)+sical→気まぐれな",etymology:"古ノルド語 hvima「目が泳ぐ」"},
+  {word:"wistful",meaning:"物悲しい・切ない",mnemonic:"wist(願う)+ful→願いが届かない切なさ",etymology:"古英語 wist「静かな・悲しい」"},
+  {word:"zealous",meaning:"熱心な・熱狂的な",mnemonic:"zeal(熱心)+ous→熱心な",etymology:"ギリシャ語 zelos「熱心・嫉妬」"},
+  {word:"aberrant",meaning:"異常な・逸脱した",mnemonic:"ab(離れて)+errant(さまよう)→正道から外れた",etymology:"ラテン語 aberrare「道に迷う」"},
+  {word:"abeyance",meaning:"一時停止・保留状態",mnemonic:"a+bey(待つ)+ance→待機状態",etymology:"古フランス語 abeance「期待」"},
+  {word:"abrogate",meaning:"（法律などを）廃止する",mnemonic:"ab(離れて)+rog(求める)+ate→要求を取り消す",etymology:"ラテン語 abrogare「廃止する」"},
+  {word:"accede",meaning:"（要求に）同意する・就任する",mnemonic:"ac+cede(譲る)→譲って同意する",etymology:"ラテン語 accedere「近づく」"},
+  {word:"accolade",meaning:"賞賛・栄誉",mnemonic:"ac+collar(首)→首を抱えて賞賛",etymology:"フランス語 accolade「抱擁」"},
+  {word:"accretion",meaning:"付加・漸増・堆積",mnemonic:"ac+creti(成長)+on→少しずつ成長する",etymology:"ラテン語 accretio「成長」"},
+  {word:"acrimonious",meaning:"辛辣な・険悪な",mnemonic:"acri(鋭い)+monious→鋭く険悪な",etymology:"ラテン語 acrimonia「刺激・辛さ」"},
+  {word:"adjudicate",meaning:"判決を下す・裁定する",mnemonic:"ad+judic(判事)+ate→判事として裁く",etymology:"ラテン語 adjudicare「判決を下す」"},
+  {word:"admonition",meaning:"警告・訓戒",mnemonic:"ad+monit(警告)+ion→警告する",etymology:"ラテン語 admonere「思い出させる」"},
+  {word:"adumbrate",meaning:"おぼろげに示す・予示する",mnemonic:"ad+umbr(影)+ate→影を先に映す",etymology:"ラテン語 adumbrare「陰影をつける」"},
+  {word:"adventitious",meaning:"偶発的な・外来の",mnemonic:"advent(到来)+itious→外からやってきた",etymology:"ラテン語 adventicius「外来の」"},
+  {word:"aegis",meaning:"保護・後援",mnemonic:"aegis(ゼウスの盾)→神の盾に守られる",etymology:"ギリシャ語 aigis「ゼウスの盾」"},
+  {word:"affectation",meaning:"気取り・わざとらしさ",mnemonic:"affect(影響)+ation→わざと影響を与えようとする",etymology:"ラテン語 affectare「熱望する」"},
+  {word:"affront",meaning:"（公然と）侮辱する",mnemonic:"af+front(正面)→正面から侮辱する",etymology:"古フランス語 afronter「正面から立ち向かう」"},
+  {word:"agnostic",meaning:"不可知論者・懐疑的な",mnemonic:"a(なし)+gnostic(知識)→知識がない",etymology:"ギリシャ語 agnostos「知られていない」"},
+  {word:"allude",meaning:"ほのめかす・暗示する",mnemonic:"al+lude(遊ぶ)→遊び半分に暗示する",etymology:"ラテン語 alludere「遊びで触れる」"},
+  {word:"amalgamate",meaning:"合併する・統合する",mnemonic:"amalgam(混合物)+ate→混ぜ合わせる",etymology:"アラビア語 al-malgham「合金」"},
+  {word:"ambivalent",meaning:"相反する感情を持つ・どちらとも言えない",mnemonic:"ambi(両方)+valent(強い)→両方が同じくらい強い",etymology:"ラテン語 ambi「両方」+valere「強い」"},
+  {word:"amelioration",meaning:"改善・向上",mnemonic:"melio(より良い)+ration→より良くすること",etymology:"ラテン語 melior「より良い」"},
+  {word:"amend",meaning:"修正する・改正する",mnemonic:"a+mend(直す)→直す",etymology:"ラテン語 emendare「欠点を取り除く」"},
+  {word:"amiably",meaning:"愛想よく・友好的に",mnemonic:"ami(友人)+ably→友人らしく",etymology:"ラテン語 amicabilis「友好的な」"},
+  {word:"amnesty",meaning:"大赦・特赦",mnemonic:"am+nesty(忘れる)→罪を忘れる恩赦",etymology:"ギリシャ語 amnestia「忘却」"},
+  {word:"anachronistic",meaning:"時代錯誤の",mnemonic:"ana(逆)+chron(時間)→時代が逆行している",etymology:"ギリシャ語 anachronismos「時代錯誤」"},
+  {word:"anathema",meaning:"呪い・忌み嫌うもの",mnemonic:"ana+thema(置く)→神に差し出された呪い",etymology:"ギリシャ語 anathema「奉納物・呪い」"},
+  {word:"animus",meaning:"敵意・悪意",mnemonic:"anim(心)+us→心の中の敵意",etymology:"ラテン語 animus「心・精神」"},
+  {word:"antecedent",meaning:"先行する・前歴・祖先",mnemonic:"ante(前)+cede(行く)+nt→前に行く",etymology:"ラテン語 antecedere「前に行く」"},
+  {word:"antipathy",meaning:"反感・嫌悪",mnemonic:"anti(反対)+pathy(感情)→反対の感情",etymology:"ギリシャ語 antipatheia「反感」"},
+  {word:"apocryphal",meaning:"真偽不明の・出所不明の",mnemonic:"apo(隠す)+cryphal→隠されて真偽不明",etymology:"ギリシャ語 apokryphos「隠された」"},
+  {word:"apostate",meaning:"背教者・変節者",mnemonic:"apo(離れて)+state(立つ)→信仰から離れる",etymology:"ギリシャ語 apostasia「離反」"},
+  {word:"apotheosis",meaning:"神格化・最高点",mnemonic:"apo+theo(神)+sis→神にする",etymology:"ギリシャ語 apotheoun「神格化する」"},
+  {word:"apprise",meaning:"知らせる・通知する",mnemonic:"ap+prise(値段をつける)→価値を知らせる",etymology:"フランス語 appris「教えられた」"},
+  {word:"apt",meaning:"適切な・傾向がある",mnemonic:"apt(適した)→適切",etymology:"ラテン語 aptus「適した」"},
+  {word:"arbitrary",meaning:"恣意的な・独断的な",mnemonic:"arbit(審判)+rary→審判の気まぐれ判断",etymology:"ラテン語 arbitrarius「個人の判断による」"},
+  {word:"archaism",meaning:"古語・時代遅れの表現",mnemonic:"arch(古い)+aism→古い表現",etymology:"ギリシャ語 archaios「古い」"},
+  {word:"ardor",meaning:"熱意・情熱",mnemonic:"ard(燃える)+or→燃えるような熱意",etymology:"ラテン語 ardor「炎・熱意」"},
+  {word:"arid",meaning:"乾燥した・不毛の",mnemonic:"arid(乾いた)→乾いた大地",etymology:"ラテン語 aridus「乾いた」"},
+  {word:"arrogate",meaning:"（権利を）不当に主張する",mnemonic:"ar+rog(求める)+ate→不当に求める",etymology:"ラテン語 arrogare「自分のものにする」"},
+  {word:"artifice",meaning:"策略・巧みな技",mnemonic:"arti(技術)+fice(作る)→巧みに作られた策略",etymology:"ラテン語 artificium「技術・巧み」"},
+  {word:"ascendancy",meaning:"優勢・支配力",mnemonic:"ascend(上がる)+ancy→上に立つ力",etymology:"ラテン語 ascendere「登る」"},
+  {word:"asperity",meaning:"厳しさ・険しさ",mnemonic:"asper(ざらざら)+ity→ざらざらした厳しさ",etymology:"ラテン語 asper「ざらざらした・厳しい」"},
+  {word:"assail",meaning:"激しく攻撃する・悩ます",mnemonic:"as+sail(帆)→帆を張って攻め込む",etymology:"古フランス語 assaillir「攻撃する」"},
+  {word:"assent",meaning:"同意する・承認",mnemonic:"as+sent(感じる)→同じように感じる",etymology:"ラテン語 assentire「同意する」"},
+  {word:"attenuate",meaning:"弱める・希薄にする",mnemonic:"at+tenu(薄い)+ate→薄くする",etymology:"ラテン語 attenuare「薄くする」"},
+  {word:"audacity",meaning:"大胆さ・厚かましさ",mnemonic:"auda(大胆)+city→大胆な行動",etymology:"ラテン語 audacitas「大胆さ」"},
+  {word:"avert",meaning:"そらす・防ぐ",mnemonic:"a+vert(向ける)→目をそらす",etymology:"ラテン語 avertere「そむく」"},
+  {word:"axiom",meaning:"自明の理・公理",mnemonic:"axio(価値)+m→価値ある自明の理",etymology:"ギリシャ語 axioma「価値あること」"},
+  {word:"balk",meaning:"ためらう・妨げる",mnemonic:"balk(梁)→梁のように立ちはだかる",etymology:"古英語 balca「梁・障害」"},
+  {word:"bane",meaning:"災いのもと・毒",mnemonic:"bane(毒)→毒のような災い",etymology:"古英語 bana「殺人者・毒」"},
+  {word:"baroque",meaning:"バロック式の・過度に装飾的な",mnemonic:"baroc(いびつな真珠)→装飾過多",etymology:"ポルトガル語 barroco「いびつな真珠」"},
+  {word:"beatific",meaning:"至福の・幸福そうな",mnemonic:"beati(幸福)+fic(作る)→幸福を作る",etymology:"ラテン語 beatus「幸福な」"},
+  {word:"belie",meaning:"（印象と）矛盾する・偽る",mnemonic:"be+lie(嘘)→嘘をつく",etymology:"古英語 beleogan「欺く」"},
+  {word:"bellicose",meaning:"好戦的な・けんか好きな",mnemonic:"belli(戦争)+cose→戦争好き",etymology:"ラテン語 bellicosus「好戦的な」"},
+  {word:"benediction",meaning:"祝福・祝祷",mnemonic:"bene(良い)+dict(言う)+ion→良い言葉を言う",etymology:"ラテン語 benedicere「祝福する」"},
+  {word:"beseech",meaning:"懇願する・嘆願する",mnemonic:"be+seech(求める)→切実に求める",etymology:"古英語 besecan「求める」"},
+  {word:"besmirch",meaning:"汚す・名誉を傷つける",mnemonic:"be+smirch(汚れ)→汚れをつける",etymology:"be-+smirch「汚す」"},
+  {word:"bestow",meaning:"（贈り物を）与える・授ける",mnemonic:"be+stow(置く)→置き与える",etymology:"中英語 bestowen「授ける」"},
+  {word:"bifurcate",meaning:"二股に分かれる",mnemonic:"bi(二)+furc(フォーク)+ate→二つに分かれる",etymology:"ラテン語 bifurcus「二叉の」"},
+  {word:"blasphemy",meaning:"神への冒涜・不敬",mnemonic:"blas(傷つける)+phemy(言葉)→神を傷つける言葉",etymology:"ギリシャ語 blasphemia「冒涜」"},
+  {word:"blighted",meaning:"荒廃した・台なしになった",mnemonic:"blight(枯らす)+ed→枯れ果てた",etymology:"おそらく古ノルド語 blikna「青ざめる」"},
+  {word:"bohemian",meaning:"自由奔放な・放浪の",mnemonic:"bohemia(ボヘミア地方)→ロマの自由な生き方",etymology:"フランス語 bohémien「ボヘミア人・放浪者」"},
+  {word:"bombard",meaning:"爆撃する・質問攻めにする",mnemonic:"bomb(爆弾)+ard→爆弾を投下する",etymology:"フランス語 bombarde「大砲」"},
+  {word:"bowdlerize",meaning:"（本などの）不適切な部分を削除する",mnemonic:"bowdler(人名)+ize→ボウドラー式に削除",etymology:"Thomas Bowdler（改訂版シェイクスピアを作った人）"},
+  {word:"brazen",meaning:"厚かましい・真鍮の",mnemonic:"braze(真鍮)+n→真鍮のように図太い",etymology:"古英語 bræsen「真鍮の」"},
+  {word:"broach",meaning:"（話題を）持ち出す",mnemonic:"broach(串)→串刺しのように話題を刺す",etymology:"古フランス語 brochier「刺す」"},
+  {word:"burnish",meaning:"磨いて光らせる・磨く",mnemonic:"burn(焼く)+ish→焼いて磨く",etymology:"古フランス語 burnir「磨く」"},
+  {word:"byzantine",meaning:"複雑怪奇な・陰謀めいた",mnemonic:"byzan(ビザンチン)+tine→ビザンチン帝国の複雑な政治",etymology:"Byzantine Empire「ビザンチン帝国」から"},
+  {word:"cacophony",meaning:"不協和音・騒音",mnemonic:"caco(悪い)+phony(音)→悪い音",etymology:"ギリシャ語 kakophonia「不快な音」"},
+  {word:"cajole",meaning:"おだてる・巧みに説得する",mnemonic:"ca+jole(鳥かごに入れる)→おだてて鳥かごに入れる",etymology:"フランス語 cajoler「おだてる」"},
+  {word:"callous",meaning:"冷淡な・無感覚な",mnemonic:"call(呼ぶ)+ous→何を呼んでも反応しない",etymology:"ラテン語 callosus「皮膚が硬くなった」"},
+  {word:"calumny",meaning:"中傷・誹謗",mnemonic:"calumn(欺く)+y→欺くための悪口",etymology:"ラテン語 calumnia「虚偽の告発」"},
+  {word:"canard",meaning:"虚偽の情報・でっち上げ",mnemonic:"canard(アヒル・仏語)→アヒルのような偽情報",etymology:"フランス語 canard「アヒル・でたらめ」"},
+  {word:"candor",meaning:"率直さ・正直さ",mnemonic:"cand(白い)+or→白く純粋な率直さ",etymology:"ラテン語 candor「白さ・輝き」"},
+  {word:"cant",meaning:"偽善的な言葉・専門用語",mnemonic:"cant(歌う)→決まり文句を歌うように繰り返す",etymology:"おそらくラテン語 cantare「歌う」"},
+  {word:"capriciousness",meaning:"気まぐれ・移り気",mnemonic:"capri(ヤギ)+ciousness→ヤギのような気まぐれ",etymology:"イタリア語 capriccio「気まぐれ」"},
+  {word:"carping",meaning:"あら探しをする・批判的な",mnemonic:"carp(コイ)+ing→コイのように口をパクパク批判する",etymology:"古ノルド語 karpa「自慢する」"},
+  {word:"catalyst",meaning:"触媒・変化を促すもの",mnemonic:"cata(下に)+lyst(解く)→下で解く触媒",etymology:"ギリシャ語 katalysis「溶解」"},
+  {word:"catharsis",meaning:"（感情の）浄化・カタルシス",mnemonic:"cathar(清める)+sis→感情を清める",etymology:"ギリシャ語 katharsis「浄化」"},
+  {word:"cavil",meaning:"あら探しをする・難癖をつける",mnemonic:"cav(穴)+il→穴を探す",etymology:"ラテン語 cavillari「あざ笑う」"},
+  {word:"celestial",meaning:"天の・神聖な",mnemonic:"celes(天)+tial→天のような",etymology:"ラテン語 caelestis「天の」"},
+  {word:"censorious",meaning:"非難好きな・批判的な",mnemonic:"censor(検閲官)+ious→検閲官のように批判する",etymology:"ラテン語 censor「批評家」"},
+  {word:"cerebral",meaning:"大脳の・知的な",mnemonic:"cerebr(脳)+al→脳のような",etymology:"ラテン語 cerebrum「脳」"},
+  {word:"chagrin",meaning:"悔しさ・屈辱感",mnemonic:"cha+grin(歯ぎしり)→歯ぎしりするほど悔しい",etymology:"フランス語 chagrin「悲しみ・悔しさ」"},
+  {word:"charlatan",meaning:"偽医者・いかさま師",mnemonic:"charla(しゃべる)+tan→しゃべり続けるいかさま師",etymology:"イタリア語 ciarlatano「大道商人」"},
+  {word:"chastise",meaning:"厳しく罰する・叱責する",mnemonic:"chaste(純粋)+ise→純粋にするために罰する",etymology:"ラテン語 castigare「罰する」"},
+  {word:"circumlocution",meaning:"遠回しな言い方・婉曲表現",mnemonic:"circum(周り)+locut(話す)+ion→周りをぐるぐる話す",etymology:"ラテン語 circumloqui「遠回しに言う」"},
+  {word:"circumscribe",meaning:"制限する・取り囲む",mnemonic:"circum(周り)+scribe(書く)→周りに線を引く",etymology:"ラテン語 circumscribere「囲む」"},
+  {word:"clairvoyant",meaning:"透視能力のある・洞察力のある",mnemonic:"clair(明るい)+voyant(見る)→明るく見える",etymology:"フランス語 clairvoyant「透視者」"},
+  {word:"clemency",meaning:"寛大さ・温情",mnemonic:"clem(穏やか)+ency→穏やかな寛大さ",etymology:"ラテン語 clementia「温情」"},
+  {word:"cloister",meaning:"修道院・世俗から隔離する",mnemonic:"clo(閉じる)+ister→閉じた場所",etymology:"ラテン語 claustrum「閉じた場所」"},
+  {word:"coalesce",meaning:"合体する・融合する",mnemonic:"co(一緒)+alesce(成長)→一緒に成長して合体",etymology:"ラテン語 coalescere「共に成長する」"},
+  {word:"codify",meaning:"（法律などを）成文化する",mnemonic:"code(法典)+ify→法典にする",etymology:"フランス語 coder「法典に入れる」"},
+  {word:"coeval",meaning:"同時代の・同じ年齢の",mnemonic:"co(一緒)+eval(時代)→同じ時代の",etymology:"ラテン語 coaevus「同じ年齢の」"},
+  {word:"colloquial",meaning:"口語的な・会話体の",mnemonic:"colloqu(会話)+ial→会話のような",etymology:"ラテン語 colloquium「会話」"},
+  {word:"comport",meaning:"（ある態度で）振る舞う",mnemonic:"com+port(運ぶ)→身を運ぶ→振る舞う",etymology:"ラテン語 comportare「持ち運ぶ」"},
+  {word:"concede",meaning:"認める・譲歩する",mnemonic:"con+cede(譲る)→譲って認める",etymology:"ラテン語 concedere「譲る」"},
+  {word:"conciliatory",meaning:"なだめるような・和解的な",mnemonic:"concili(和解)+atory→和解をもたらす",etymology:"ラテン語 conciliare「和解させる」"},
+  {word:"condone",meaning:"（悪いことを）大目に見る",mnemonic:"con+done(許す)→全て許す",etymology:"ラテン語 condonare「許す」"},
+  {word:"confound",meaning:"混乱させる・驚かせる",mnemonic:"con+found(見つける)→見つけられなくして混乱させる",etymology:"ラテン語 confundere「混ぜ合わせる」"},
+  {word:"congruent",meaning:"一致した・適合した",mnemonic:"con+gru(一致)+ent→一致している",etymology:"ラテン語 congruere「一致する」"},
+  {word:"conjecture",meaning:"推測・推量",mnemonic:"con+jectur(投げる)→推測を投げかける",etymology:"ラテン語 conjectura「推測」"},
+  {word:"consternation",meaning:"仰天・狼狽",mnemonic:"constern(倒れる)+ation→倒れるほど驚く",etymology:"ラテン語 consternare「驚かせる」"},
+  {word:"controvert",meaning:"反論する・論争する",mnemonic:"contro+vert(向ける)→反対に向ける",etymology:"ラテン語 contra「反対」+vertere「向ける」"},
+  {word:"contumacious",meaning:"反抗的な・頑固に従わない",mnemonic:"contu+macious→頑固に抵抗する",etymology:"ラテン語 contumax「頑固な反抗者」"},
+  {word:"contumely",meaning:"侮辱・軽蔑的な言動",mnemonic:"contu+mely→侮辱的な言葉",etymology:"ラテン語 contumelia「侮辱」"},
+  {word:"convivial",meaning:"陽気な・社交的な",mnemonic:"con+vivial(生きる)→一緒に生き生きと",etymology:"ラテン語 convivium「宴会」"},
+  {word:"corrosive",meaning:"腐食性の・有害な",mnemonic:"cor+ros(かじる)+ive→かじって腐食させる",etymology:"ラテン語 corrodere「かじり取る」"},
+  {word:"cosmopolitan",meaning:"世界主義的な・国際的な",mnemonic:"cosmo(世界)+politan(市民)→世界市民",etymology:"ギリシャ語 kosmopolites「世界市民」"},
+  {word:"countenance",meaning:"顔つき・支持する",mnemonic:"counter(反対)+nance→反対しない顔で支持する",etymology:"古フランス語 contenance「態度」"},
+  {word:"covert",meaning:"隠れた・秘密の",mnemonic:"cover(覆う)+t→覆われた秘密",etymology:"古フランス語 covert「覆われた」"},
+  {word:"covetous",meaning:"（他人のものを）欲しがる・貪欲な",mnemonic:"covet(欲しがる)+ous→欲しがってばかり",etymology:"古フランス語 coveiter「欲しがる」"},
+  {word:"craven",meaning:"臆病な・意気地なし",mnemonic:"crave(切望)+n→怖くて隅に縮こまる",etymology:"古フランス語 cravante「打ち倒された」"},
+  {word:"criterion",meaning:"基準・判断基準",mnemonic:"criteri(裁く)+on→裁くための基準",etymology:"ギリシャ語 kriterion「判断の手段」"},
+  {word:"cryptic",meaning:"謎めいた・秘密の",mnemonic:"crypt(暗号)+ic→暗号のような",etymology:"ギリシャ語 kryptos「隠された」"},
+  {word:"culprit",meaning:"犯人・罪人",mnemonic:"culp(罪)+rit→罪ある人",etymology:"古フランス語 cul prit「有罪を主張する」"},
+  {word:"cumbersome",meaning:"扱いにくい・厄介な",mnemonic:"cumber(邪魔)+some→邪魔ばかり",etymology:"中英語 combre「邪魔」"},
+  {word:"cumulative",meaning:"累積的な・蓄積する",mnemonic:"cumul(積み重ね)+ative→積み重なる",etymology:"ラテン語 cumulare「積み重ねる」"},
+  {word:"cynical",meaning:"冷笑的な・皮肉な",mnemonic:"cynic(犬)+al→犬のようにうなる冷笑家",etymology:"ギリシャ語 kynikos「犬のような」"},
+  {word:"dauntless",meaning:"大胆な・恐れを知らない",mnemonic:"daunt(くじく)+less→くじかれない",etymology:"古フランス語 danter「制圧する」+less「ない」"},
+  {word:"debilitate",meaning:"衰弱させる・弱める",mnemonic:"de+bilit(弱い)+ate→弱くする",etymology:"ラテン語 debilitare「弱らせる」"},
+  {word:"decorum",meaning:"礼儀正しさ・品位",mnemonic:"decor(飾る)+um→飾られた品位",etymology:"ラテン語 decus「品位・栄誉」"},
+  {word:"deign",meaning:"（目下に）恩着せがましくする",mnemonic:"de+ign(値する)→値すると思って降りてくる",etymology:"ラテン語 dignari「ふさわしいと思う」"},
+  {word:"delectation",meaning:"楽しみ・喜び",mnemonic:"delect(喜ぶ)+ation→喜び",etymology:"ラテン語 delectare「喜ばせる」"},
+  {word:"deleterious",meaning:"有害な・悪影響のある",mnemonic:"delete(削除)+rious→削除してしまう害",etymology:"ギリシャ語 deleterios「有害な」"},
+  {word:"demagogue",meaning:"扇動政治家・民衆扇動者",mnemonic:"dem(民衆)+agogue(導く)→民衆を扇動して導く",etymology:"ギリシャ語 demagogos「民衆の指導者」"},
+  {word:"demur",meaning:"異議を唱える・ためらう",mnemonic:"de+mur(遅らせる)→遅らせて異議を唱える",etymology:"ラテン語 demorari「遅らせる」"},
+  {word:"denouement",meaning:"（物語の）結末・解決",mnemonic:"de+noue(結ぶ)+ment→結び目を解く",etymology:"フランス語 dénouer「解く」"},
+  {word:"deplete",meaning:"（資源などを）使い果たす",mnemonic:"de+plete(満たす)→満たされたものを空にする",etymology:"ラテン語 deplere「空にする」"},
+  {word:"deprecate",meaning:"（強く）非難する・反対する",mnemonic:"de+prec(祈る)+ate→祈って反対する",etymology:"ラテン語 deprecari「祈って退ける」"},
+  {word:"dereliction",meaning:"職務怠慢・放棄",mnemonic:"de+relict(残された)+ion→残されて放棄された",etymology:"ラテン語 derelictus「見捨てられた」"},
+  {word:"derision",meaning:"嘲笑・あざけり",mnemonic:"de+rision(笑い)→見下した笑い",etymology:"ラテン語 deridere「あざ笑う」"},
+  {word:"derivative",meaning:"派生的な・独創性のない",mnemonic:"deriv(源から引く)+ative→源から引き出した",etymology:"ラテン語 derivare「引き出す」"},
+  {word:"desultory",meaning:"とりとめのない・散漫な",mnemonic:"de+sult(跳ぶ)+ory→跳び回ってとりとめない",etymology:"ラテン語 desultor「離れて跳ぶ人」"},
+  {word:"deter",meaning:"思いとどまらせる・抑止する",mnemonic:"de+ter(怖がらせる)→怖がらせて止める",etymology:"ラテン語 deterrere「怖がらせて遠ざける」"},
+  {word:"diabolical",meaning:"悪魔的な・極悪の",mnemonic:"diabol(悪魔)+ical→悪魔のような",etymology:"ギリシャ語 diabolos「悪魔」"},
+  {word:"diatribe",meaning:"激しい非難・痛烈な批判",mnemonic:"dia+tribe(摩擦)→摩擦を起こす激しい批判",etymology:"ギリシャ語 diatribe「時間を費やす・議論」"},
+  {word:"diffuse",meaning:"広める・散漫な",mnemonic:"dif+fuse(注ぐ)→広く注ぎ散らす",etymology:"ラテン語 diffundere「広げる」"},
+  {word:"dilapidated",meaning:"荒廃した・老朽化した",mnemonic:"di+lapid(石)+ated→石が崩れた状態",etymology:"ラテン語 dilapidare「石を散らす」"},
+  {word:"dilatory",meaning:"遅らせる・ぐずぐずする",mnemonic:"dilat(遅らせる)+ory→遅らせる",etymology:"ラテン語 dilatorius「遅らせる」"},
+  {word:"dirge",meaning:"哀歌・葬送歌",mnemonic:"dir(悲しい)+ge→悲しい歌",etymology:"ラテン語 dirige「導け」（葬儀のラテン語句）"},
+  {word:"disabuse",meaning:"（誤解を）解く・悟らせる",mnemonic:"dis+abuse(誤用)→誤りを取り除く",etymology:"フランス語 désabuser「幻想から覚ます」"},
+  {word:"disconcert",meaning:"当惑させる・動揺させる",mnemonic:"dis+concert(調和)→調和を崩す",etymology:"フランス語 déconcerter「混乱させる」"},
+  {word:"discordant",meaning:"不和の・調和しない",mnemonic:"dis+cord(心)+ant→心が合わない",etymology:"ラテン語 discordare「不和である」"},
+  {word:"discourse",meaning:"議論・談話・論述する",mnemonic:"dis+course(コース)→コースを外れて議論する",etymology:"ラテン語 discurrere「走り回る」"},
+  {word:"disdain",meaning:"軽蔑・蔑む",mnemonic:"dis+dain(値する)→値しないと思う",etymology:"古フランス語 desdeignier「見下す」"},
+  {word:"disillusion",meaning:"幻滅させる・幻想を壊す",mnemonic:"dis+illusion(幻想)→幻想を取り除く",etymology:"dis-+illusion「幻想」"},
+  {word:"disinterested",meaning:"私心のない・公平な",mnemonic:"dis+interested(利害関係)→利害関係がない",etymology:"dis-+interested「利益に関心がある」"},
+  {word:"disparage",meaning:"けなす・軽視する",mnemonic:"dis+parage(同等)→同等でないと見下す",etymology:"古フランス語 desparager「不釣り合いな婚姻をさせる」"},
+  {word:"dispel",meaning:"払い除ける・消散させる",mnemonic:"dis+pel(駆る)→追い払う",etymology:"ラテン語 dispellere「追い散らす」"},
+  {word:"disputatious",meaning:"議論好きな・論争的な",mnemonic:"disput(議論)+atious→議論好き",etymology:"ラテン語 disputare「議論する」"},
+  {word:"dissidence",meaning:"異議・反対意見",mnemonic:"dis+sid(座る)+ence→別の席に座る",etymology:"ラテン語 dissidere「離れて座る」"},
+  {word:"dissolution",meaning:"解散・消滅・放蕩",mnemonic:"dis+solut(解く)+ion→解いて散らす",etymology:"ラテン語 dissolutio「解体」"},
+  {word:"dissonance",meaning:"不協和音・不調和",mnemonic:"dis+son(音)+ance→音が合わない",etymology:"ラテン語 dissonantia「不調和」"},
+  {word:"distend",meaning:"膨張する・ふくらませる",mnemonic:"dis+tend(伸ばす)→伸ばして膨らむ",etymology:"ラテン語 distendere「引き伸ばす」"},
+  {word:"distraught",meaning:"取り乱した・狂乱した",mnemonic:"dis+traught(引っ張られた)→あちこちに引っ張られた",etymology:"中英語 distract「注意をそらす」"},
+  {word:"divergent",meaning:"異なる・分岐する",mnemonic:"di+verg(傾く)+ent→別の方向に傾く",etymology:"ラテン語 divergere「別れる」"},
+  {word:"dogmatic",meaning:"独断的な・教条的な",mnemonic:"dogm(教義)+atic→教義を押しつける",etymology:"ギリシャ語 dogma「信念・教義」"},
+  {word:"doleful",meaning:"悲しそうな・陰気な",mnemonic:"dole(悲しみ)+ful→悲しみにあふれた",etymology:"古フランス語 doel「悲しみ」"},
+  {word:"dormant",meaning:"休眠中の・活動していない",mnemonic:"dorm(眠る)+ant→眠っている",etymology:"フランス語 dormir「眠る」"},
+  {word:"draconian",meaning:"（法律などが）非常に厳しい",mnemonic:"draco(ドラコン・古代の立法者)+ian→ドラコンのような厳しさ",etymology:"古代アテネの立法者 Dracon の名から"},
+  {word:"duplicitous",meaning:"二枚舌の・不誠実な",mnemonic:"duplic(二重)+itous→二重の顔",etymology:"ラテン語 duplicitas「二重性」"},
+  {word:"durable",meaning:"耐久性のある・長持ちする",mnemonic:"dur(硬い)+able→硬くて長持ち",etymology:"ラテン語 durare「続く」"},
+  {word:"edify",meaning:"精神的・道徳的に高める",mnemonic:"edi(建てる)+fy→精神を建て上げる",etymology:"ラテン語 aedificare「建てる」"},
+  {word:"effervescent",meaning:"泡立つ・快活な",mnemonic:"ef+ferv(沸騰)+escent→泡立って沸騰する",etymology:"ラテン語 effervescere「泡立つ」"},
+  {word:"effete",meaning:"活力を失った・堕落した",mnemonic:"ef+fete(胎を出した)→産み終えた",etymology:"ラテン語 effetus「産み尽くした」"},
+  {word:"efficacious",meaning:"（薬などが）効き目がある",mnemonic:"effic(効果)+acious→効果的な",etymology:"ラテン語 efficax「効果的な」"},
+  {word:"effrontery",meaning:"厚かましさ・ずうずうしさ",mnemonic:"ef+front(正面)+ery→正面から堂々と厚かましい",etymology:"フランス語 effronterie「厚かましさ」"},
+  {word:"egalitarian",meaning:"平等主義の",mnemonic:"egalit(平等)+arian→平等を主張する",etymology:"フランス語 égal「平等な」"},
+  {word:"egotism",meaning:"自己中心主義・うぬぼれ",mnemonic:"ego(自分)+tism→自分のことばかり",etymology:"ラテン語 ego「私」"},
+  {word:"elation",meaning:"喜び・高揚感",mnemonic:"elat(持ち上げる)+ion→気持ちが持ち上がる",etymology:"ラテン語 efferre「運び上げる」"},
+  {word:"embellish",meaning:"飾り立てる・美化する",mnemonic:"em+bellish(美しくする)→美しく飾る",etymology:"古フランス語 embellir「美しくする」"},
+  {word:"eminent",meaning:"著名な・優れた",mnemonic:"e+min(突き出る)+ent→突き出るほど優れた",etymology:"ラテン語 eminere「突き出る」"},
+  {word:"empirical",meaning:"経験的な・実証的な",mnemonic:"empiri(経験)+cal→経験に基づく",etymology:"ギリシャ語 empeiria「経験」"},
+  {word:"encomium",meaning:"賛辞・称賛の言葉",mnemonic:"en+com(一緒)+ium→一緒に称える",etymology:"ギリシャ語 enkomion「賛歌」"},
+  {word:"engender",meaning:"引き起こす・生み出す",mnemonic:"en+gender(生む)→生み出す",etymology:"ラテン語 ingenerare「生み出す」"},
+  {word:"ennui",meaning:"退屈・倦怠感",mnemonic:"ennui(フランス語で退屈)→退屈感",etymology:"フランス語 ennui「退屈」"},
+  {word:"enormity",meaning:"凶悪さ・重大な悪事",mnemonic:"e+norm(規範)+ity→規範を外れた行為",etymology:"ラテン語 enormis「規範外の」"},
+  {word:"enthrall",meaning:"魅了する・虜にする",mnemonic:"en+thrall(奴隷)→奴隷にするほど魅了する",etymology:"古英語 thrall「奴隷」"},
+  {word:"enumerate",meaning:"列挙する・数え上げる",mnemonic:"e+numer(数)+ate→数え上げる",etymology:"ラテン語 enumerare「数え上げる」"},
+  {word:"equanimity",meaning:"平静さ・落ち着き",mnemonic:"equa(平等)+nimity(心)→心が平等に保たれた状態",etymology:"ラテン語 aequanimitas「平静さ」"},
+  {word:"equitable",meaning:"公平な・公正な",mnemonic:"equit(等しい)+able→等しく扱える",etymology:"ラテン語 aequitas「平等」"},
+  {word:"erudite",meaning:"博学な・学識のある",mnemonic:"e+rud(粗野)+ite→粗野でない→学識がある",etymology:"ラテン語 erudire「教育する」"},
+  {word:"eschew",meaning:"（意識的に）避ける",mnemonic:"e+schew(避ける)→意識的に避ける",etymology:"古フランス語 eschiver「避ける」"},
+  {word:"estrange",meaning:"疎遠にする・仲を引き裂く",mnemonic:"e+strange(よそよそしい)→よそよそしくさせる",etymology:"ラテン語 extraneus「外部の」"},
+  {word:"eulogy",meaning:"称賛の言葉・追悼文",mnemonic:"eu(よい)+logy(言葉)→よい言葉",etymology:"ギリシャ語 eulogia「称賛」"},
+  {word:"evanescent",meaning:"すぐに消えてしまう・はかない",mnemonic:"evan(消える)+escent→消えていく",etymology:"ラテン語 evanescere「消える」"},
+  {word:"evince",meaning:"（感情などを）明らかに示す",mnemonic:"e+vince(勝つ)→証拠で勝って示す",etymology:"ラテン語 evincere「証明する」"},
+  {word:"excoriate",meaning:"（言葉で）激しく非難する",mnemonic:"ex+cori(皮)+ate→皮を剥ぐように非難する",etymology:"ラテン語 excoriare「皮を剥ぐ」"},
+  {word:"exemplary",meaning:"模範的な・典型的な",mnemonic:"exemplar(模範)+y→模範のような",etymology:"ラテン語 exemplum「模範」"},
+  {word:"exhaustive",meaning:"徹底的な・網羅的な",mnemonic:"exhaust(使い尽くす)+ive→使い尽くすほど徹底的",etymology:"ラテン語 exhaurire「汲み尽くす」"},
+  {word:"exhort",meaning:"強く勧める・励ます",mnemonic:"ex+hort(勧める)→強く勧める",etymology:"ラテン語 exhortari「強く勧める」"},
+  {word:"exonerate",meaning:"（罪・義務から）解放する",mnemonic:"ex+oner(重荷)+ate→重荷から解放する",etymology:"ラテン語 exonerare「荷を下ろす」"},
+  {word:"expatiate",meaning:"詳しく述べる・話を広げる",mnemonic:"ex+pati(広げる)+ate→広げて詳しく述べる",etymology:"ラテン語 expatiari「歩き回る」"},
+  {word:"expedite",meaning:"促進する・速める",mnemonic:"ex+ped(足)+ite→足を解放して速める",etymology:"ラテン語 expedire「足を解放する」"},
+  {word:"expiate",meaning:"（罪を）償う",mnemonic:"ex+piate(宥める)→罪を宥めて償う",etymology:"ラテン語 expiare「浄化する」"},
+  {word:"expunge",meaning:"（記録から）削除する",mnemonic:"ex+punge(刺す)→刺して消す",etymology:"ラテン語 expungere「点を打って消す」"},
+  {word:"extant",meaning:"現存する・今も存在する",mnemonic:"ex+tant(立つ)→今も立っている",etymology:"ラテン語 exstare「存在する」"},
+  {word:"extol",meaning:"賞賛する・褒め称える",mnemonic:"ex+tol(持ち上げる)→高く持ち上げて賞賛する",etymology:"ラテン語 extollere「持ち上げる」"},
+  {word:"extraneous",meaning:"無関係の・外来の",mnemonic:"extra(外)+neous→外から来た無関係のもの",etymology:"ラテン語 extraneus「外部の」"},
+  {word:"exuberant",meaning:"活気にあふれた・豊かな",mnemonic:"ex+uber(豊か)+ant→豊かに溢れ出る",etymology:"ラテン語 exuberare「豊かに実る」"},
+  {word:"fabricate",meaning:"でっち上げる・製造する",mnemonic:"fabric(布地)+ate→布地を作るように作り上げる",etymology:"ラテン語 fabricari「作る」"},
+  {word:"facile",meaning:"安易な・表面的な",mnemonic:"faci(簡単)+le→簡単すぎて表面的",etymology:"ラテン語 facilis「簡単な」"},
+  {word:"fallacious",meaning:"誤りを含む・誤った",mnemonic:"fallac(欺く)+ious→欺きを含む",etymology:"ラテン語 fallacia「欺き」"},
+  {word:"fatalism",meaning:"宿命論・運命論",mnemonic:"fatal(運命)+ism→運命論",etymology:"ラテン語 fatalis「運命の」"},
+  {word:"fawn",meaning:"へつらう・媚びる",mnemonic:"fawn(子鹿)→子鹿のようにすり寄る",etymology:"古英語 fagnian「喜ぶ」"},
+  {word:"feign",meaning:"ふりをする・偽る",mnemonic:"feign(偽る)→偽りの演技",etymology:"古フランス語 feindre「形作る・偽る」"},
+  {word:"felicitous",meaning:"（言葉などが）うまく表現された・幸運な",mnemonic:"felicit(幸福)+ous→幸福なほど的確な",etymology:"ラテン語 felix「幸福な」"},
+  {word:"feral",meaning:"野生の・凶暴な",mnemonic:"fer(野獣)+al→野獣のような",etymology:"ラテン語 fera「野生動物」"},
+  {word:"ferment",meaning:"発酵する・騒動を引き起こす",mnemonic:"ferm(沸騰)+ent→沸騰させる騒動",etymology:"ラテン語 fermentum「酵母」"},
+  {word:"ferocious",meaning:"獰猛な・残忍な",mnemonic:"feroc(野獣)+ious→野獣のように獰猛",etymology:"ラテン語 ferox「獰猛な」"},
+  {word:"fester",meaning:"（傷などが）化膿する・悪化する",mnemonic:"fester(膿む)→膿んで悪化する",etymology:"古フランス語 festre「腐った傷口」"},
+  {word:"fetid",meaning:"悪臭のする・不快な匂いの",mnemonic:"fet(臭い)+id→臭い",etymology:"ラテン語 fetidus「悪臭のある」"},
+  {word:"fidelity",meaning:"忠誠・誠実さ",mnemonic:"fidel(信頼)+ity→信頼の誠実さ",etymology:"ラテン語 fidelitas「忠実さ」"},
+  {word:"fitful",meaning:"断続的な・気まぐれな",mnemonic:"fit(発作)+ful→発作的な",etymology:"古英語 fitt「発作」"},
+  {word:"flippancy",meaning:"軽薄さ・不謹慎さ",mnemonic:"flip(軽くはじく)+ancy→軽くはじくような態度",etymology:"おそらく flip「ぱちんと打つ」から"},
+  {word:"florid",meaning:"（文体などが）華麗すぎる・顔色のよい",mnemonic:"flor(花)+id→花のように華やか",etymology:"ラテン語 floridus「花でいっぱいの」"},
+  {word:"fluctuate",meaning:"変動する・波動する",mnemonic:"fluct(波)+uate→波のように揺れ動く",etymology:"ラテン語 fluctuare「波立つ」"},
+  {word:"forbid",meaning:"禁止する",mnemonic:"for+bid(命令)→命令で禁じる",etymology:"古英語 forbeodan「禁じる」"},
+  {word:"forensic",meaning:"法廷の・科学捜査の",mnemonic:"foren(法廷)+sic→法廷の",etymology:"ラテン語 forensis「公開討論の」"},
+  {word:"forgo",meaning:"（喜んで）あきらめる",mnemonic:"for+go(行く)→行くことを諦める",etymology:"古英語 forgan「通り過ぎる」"},
+  {word:"forlorn",meaning:"見捨てられた・希望のない",mnemonic:"for+lorn(失った)→すべてを失った",etymology:"古英語 forloren「失われた」"},
+  {word:"forthright",meaning:"率直な・直接的な",mnemonic:"forth(前に)+right(正しい)→正しく前に進む率直さ",etymology:"古英語 forð「前に」+riht「正しい」"},
+  {word:"fragile",meaning:"壊れやすい・はかない",mnemonic:"frag(壊れる)+ile→壊れやすい",etymology:"ラテン語 fragilis「壊れやすい」"},
+  {word:"frivolous",meaning:"軽薄な・くだらない",mnemonic:"frivol(くだらない)+ous→くだらない",etymology:"ラテン語 frivolus「くだらない」"},
+  {word:"frugal",meaning:"質素な・倹約的な",mnemonic:"frug(果実)+al→必要な果実だけで生きる",etymology:"ラテン語 frugalis「質素な」"},
+  {word:"fugitive",meaning:"逃亡者・一時的な",mnemonic:"fugi(逃げる)+tive→逃げる人",etymology:"ラテン語 fugere「逃げる」"},
+  {word:"fulsome",meaning:"過度に称賛した・不誠実な",mnemonic:"ful(満たす)+some→満たしすぎて不誠実",etymology:"中英語 fulsome「過度な」"},
+  {word:"furtively",meaning:"こそこそと",mnemonic:"fur(泥棒)+tively→泥棒のようにこそこそ",etymology:"ラテン語 furtivus「こっそりした」"},
+  {word:"gainsay",meaning:"否定する・反論する",mnemonic:"gain(反対)+say(言う)→反対に言う",etymology:"古英語 gagnsecgan「反論する」"},
+  {word:"galvanize",meaning:"活気づける・刺激する",mnemonic:"galvani(ガルバーニ電気)+ze→電気ショックで活性化",etymology:"Luigi Galvani（電気の研究者）の名から"},
+  {word:"garner",meaning:"集める・蓄積する",mnemonic:"garn(穀物)+er→穀物を集める倉",etymology:"古フランス語 gernier「穀物庫」"},
+  {word:"gauche",meaning:"不器用な・洗練されていない",mnemonic:"gauche(左・仏語)→左手のように不器用",etymology:"フランス語 gauche「左・不器用な」"},
+  {word:"germane",meaning:"関連した・適切な",mnemonic:"german(同族)+e→同族のように関連した",etymology:"ラテン語 germanus「同族の」"},
+  {word:"grandiose",meaning:"壮大な・誇大な",mnemonic:"grand(大きい)+iose→大きくて誇大",etymology:"フランス語 grandiose「壮大な」"},
+  {word:"gratuitous",meaning:"無償の・不必要な",mnemonic:"gratuit(無料)+ous→無料・不必要",etymology:"ラテン語 gratuitus「無償の」"},
+  {word:"grievous",meaning:"深刻な・悲痛な",mnemonic:"griev(悲しみ)+ous→悲しみに満ちた",etymology:"古フランス語 gref「重い」"},
+  {word:"grim",meaning:"厳しい・陰気な",mnemonic:"grim(厳しい)→厳しい表情",etymology:"古英語 grimm「残忍な・厳しい」"},
+  {word:"grotesque",meaning:"奇怪な・グロテスクな",mnemonic:"grotte(洞窟)+sque→洞窟の奇妙な絵",etymology:"イタリア語 grottesca「洞窟風の絵」"},
+  {word:"gullible",meaning:"だまされやすい・信じやすい",mnemonic:"gull(カモメ)+ible→カモメのように騙される",etymology:"おそらく gull「騙す」から"},
+  {word:"hackneyed",meaning:"陳腐な・使い古された",mnemonic:"hackney(乗り合い馬車)+ed→乗り回されて擦り切れた",etymology:"Hackney（ロンドンの地名）から"},
+  {word:"hallmark",meaning:"品質の証明・特徴",mnemonic:"hall+mark(印)→ホールで刻印された品質証明",etymology:"Goldsmiths' Hall（金細工師組合）から"},
+  {word:"hapless",meaning:"不運な・みじめな",mnemonic:"hap(運)+less→運がない",etymology:"古ノルド語 happ「幸運」+less「ない」"},
+  {word:"hasten",meaning:"急がせる・急ぐ",mnemonic:"haste(急ぐ)+n→急ぐ",etymology:"古フランス語 haste「急ぎ」"},
+  {word:"haughty",meaning:"傲慢な・尊大な",mnemonic:"haut(高い・仏語)+y→高みにいる傲慢さ",etymology:"古フランス語 haut「高い」"},
+  {word:"hedonism",meaning:"快楽主義",mnemonic:"hedon(快楽)+ism→快楽を追求する主義",etymology:"ギリシャ語 hedone「快楽」"},
+  {word:"heterogeneous",meaning:"異質な・多様な",mnemonic:"hetero(異なる)+geneous(種類)→異なる種類が混じった",etymology:"ギリシャ語 heterogenes「異なる種類の」"},
+  {word:"hierarchy",meaning:"階層・ヒエラルキー",mnemonic:"hiero(神聖)+archy(支配)→神聖な支配の秩序",etymology:"ギリシャ語 hierarchia「聖職者の支配」"},
+  {word:"holistic",meaning:"全体論的な・包括的な",mnemonic:"hol(全体)+istic→全体を見る",etymology:"ギリシャ語 holos「全体」"},
+  {word:"homogeneous",meaning:"同質の・均一な",mnemonic:"homo(同じ)+geneous(種類)→同じ種類",etymology:"ギリシャ語 homogenes「同じ種類の」"},
+  {word:"hortatory",meaning:"勧告的な・励ましの",mnemonic:"hort(勧める)+atory→勧める性質の",etymology:"ラテン語 hortari「強く勧める」"},
+  {word:"hyperbole",meaning:"誇張法・誇張表現",mnemonic:"hyper(超える)+bole(投げる)→超えて投げる誇張",etymology:"ギリシャ語 hyperbole「超過・誇張」"},
+  {word:"hypocritical",meaning:"偽善的な",mnemonic:"hypo(下に)+crit(判断)+ical→判断を下に隠す",etymology:"ギリシャ語 hypokrites「俳優」"},
+  {word:"iconoclast",meaning:"因習打破者・偶像破壊者",mnemonic:"icon(偶像)+clast(壊す)→偶像を壊す",etymology:"ギリシャ語 eikonoklastes「偶像破壊者」"},
+  {word:"ignite",meaning:"点火する・火をつける",mnemonic:"igni(火)+te→火をつける",etymology:"ラテン語 ignire「火をつける」"},
+  {word:"illicit",meaning:"違法な・不法な",mnemonic:"il(否定)+licit(許可)→許可されていない",etymology:"ラテン語 illicitus「許されていない」"},
+  {word:"imbue",meaning:"（考え・感情を）しみ込ませる",mnemonic:"im+bue(色づける)→しみ込ませる",etymology:"ラテン語 imbuere「しみ込ませる」"},
+  {word:"imminent",meaning:"差し迫った・切迫した",mnemonic:"im+min(突き出る)+ent→頭上に突き出ている",etymology:"ラテン語 imminere「上に突き出る」"},
+  {word:"impartial",meaning:"公平な・偏らない",mnemonic:"im+partial(部分的)→部分的でない→公平",etymology:"im-（否定）+partial「偏った」"},
+  {word:"impediment",meaning:"障害・妨げ",mnemonic:"im+ped(足)+iment→足を縛る障害",etymology:"ラテン語 impedire「足を縛る」"},
+  {word:"imperious",meaning:"横柄な・命令的な",mnemonic:"im+perio(帝国)+us→帝国のように命令的",etymology:"ラテン語 imperiosus「命令する」"},
+  {word:"imperturbable",meaning:"動じない・平静な",mnemonic:"im+perturb(かき乱す)+able→かき乱されない",etymology:"ラテン語 imperturbabilis「かき乱されない」"},
+  {word:"impervious",meaning:"影響を受けない・通さない",mnemonic:"im+pervi(通る)+ous→通すことができない",etymology:"ラテン語 impervius「通れない」"},
+  {word:"impugn",meaning:"異議を唱える・信頼性を疑う",mnemonic:"im+pugn(戦う)→戦いを挑んで疑う",etymology:"ラテン語 impugnare「攻撃する」"},
+  {word:"inadvertently",meaning:"不注意に・うっかりして",mnemonic:"in+advert(注意)+ently→注意を向けずに",etymology:"ラテン語 advertere「注意を向ける」の否定"},
+  {word:"incisive",meaning:"鋭い・鋭利な",mnemonic:"incis(切る)+ive→切り込む鋭さ",etymology:"ラテン語 incidere「切り込む」"},
+  {word:"incontrovertible",meaning:"反論の余地のない・明白な",mnemonic:"in+controvert(反論)+ible→反論できない",etymology:"in-（否定）+controvertible「反論できる」"},
+  {word:"indignation",meaning:"憤慨・怒り",mnemonic:"in+dign(値する)+ation→値しないことへの怒り",etymology:"ラテン語 indignari「憤慨する」"},
+  {word:"indiscriminate",meaning:"無差別の・見境のない",mnemonic:"in+discriminat(区別)+e→区別しない",etymology:"in-（否定）+discriminate「区別する」"},
+  {word:"indolence",meaning:"怠惰・無気力",mnemonic:"in+dol(痛み)+ence→痛みを感じないほど動かない",etymology:"ラテン語 indolens「苦痛を感じない」"},
+  {word:"indulgent",meaning:"甘やかす・寛大な",mnemonic:"indulg(甘やかす)+ent→甘やかす",etymology:"ラテン語 indulgere「甘やかす」"},
+  {word:"ineffable",meaning:"言葉で表せない・口に出せない",mnemonic:"in+ef+fable(話せる)→話せないほど",etymology:"ラテン語 ineffabilis「言葉にできない」"},
+  {word:"inept",meaning:"不適切な・無能な",mnemonic:"in(否定)+ept(適した)→適していない",etymology:"ラテン語 ineptus「不適切な」"},
+  {word:"iniquity",meaning:"不正・悪事",mnemonic:"in+iquity(公平)→公平でない悪事",etymology:"ラテン語 iniquitas「不公平」"},
+  {word:"innocuous",meaning:"無害な・当たり障りのない",mnemonic:"in(否定)+noc(害)+uous→害のない",etymology:"ラテン語 innocuus「無害な」"},
+  {word:"innuendo",meaning:"当てこすり・遠回しの非難",mnemonic:"in+nuendo(示す)→暗に示す",etymology:"ラテン語 innuere「示す」"},
+  {word:"inordinate",meaning:"過度の・法外な",mnemonic:"in+ordin(秩序)+ate→秩序を超えた",etymology:"ラテン語 inordinatus「無秩序な」"},
+  {word:"insatiable",meaning:"飽くことを知らない",mnemonic:"in+sati(満足)+able→満足できない",etymology:"ラテン語 insatiabilis「満足させられない」"},
+  {word:"insidious",meaning:"陰険な・じわじわと有害な",mnemonic:"insid(待ち伏せ)+ious→待ち伏せするような陰険さ",etymology:"ラテン語 insidiae「待ち伏せ」"},
+  {word:"insinuate",meaning:"暗示する・徐々に入り込む",mnemonic:"in+sinuat(曲がる)→曲がりくねって入り込む",etymology:"ラテン語 insinuare「曲がりくねって進む」"},
+  {word:"insipid",meaning:"味気ない・面白みのない",mnemonic:"in+sipid(味)+→味がない",etymology:"ラテン語 insipidus「無味な」"},
+  {word:"insouciant",meaning:"のんきな・無頓着な",mnemonic:"in+souci(心配・仏語)→心配がない",etymology:"フランス語 insouciant「無頓着な」"},
+  {word:"intemperate",meaning:"節制のない・過激な",mnemonic:"in+temperate(節度ある)→節度がない",etymology:"ラテン語 intemperans「節制のない」"},
+  {word:"intermittent",meaning:"断続的な・間欠的な",mnemonic:"inter+mitt(送る)+ent→間を置いて送られる",etymology:"ラテン語 intermittere「中断する」"},
+  {word:"intractable",meaning:"扱いにくい・頑固な",mnemonic:"in+tract(引く)+able→引っ張れない",etymology:"ラテン語 intractabilis「扱えない」"},
+  {word:"inundate",meaning:"氾濫させる・圧倒する",mnemonic:"in+und(波)+ate→波が押し寄せる",etymology:"ラテン語 inundare「氾濫する」"},
+  {word:"invective",meaning:"罵倒・激しい非難",mnemonic:"in+vect(運ぶ)+ive→非難を運んでくる",etymology:"ラテン語 invectiva「攻撃的な言葉」"},
+  {word:"invidious",meaning:"不公平な・嫉妬を引き起こす",mnemonic:"invid(妬む)+ious→妬みを引き起こす",etymology:"ラテン語 invidiosus「妬まれる」"},
+  {word:"invoke",meaning:"（法律・権威などを）発動する・呼びかける",mnemonic:"in+voke(呼ぶ)→呼び出す",etymology:"ラテン語 invocare「呼びかける」"},
+  {word:"irony",meaning:"皮肉・反語",mnemonic:"iron(鉄)+y→鉄のように固い皮肉",etymology:"ギリシャ語 eironeia「見せかけの無知」"},
+  {word:"irreproachable",meaning:"非の打ちどころのない",mnemonic:"ir+reproach(非難)+able→非難できない",etymology:"ir-（否定）+reproachable「非難できる」"},
+  {word:"irrevocable",meaning:"取り消せない・変更不可能な",mnemonic:"ir+revoc(呼び戻す)+able→呼び戻せない",etymology:"ラテン語 irrevocabilis「取り消せない」"},
+  {word:"itinerant",meaning:"巡回する・旅する",mnemonic:"itiner(旅)+ant→旅する",etymology:"ラテン語 iter「旅」"},
+  {word:"jettison",meaning:"投棄する・放棄する",mnemonic:"jetti(投げる)+son→荷物を海に投げ捨てる",etymology:"古フランス語 jeter「投げる」"},
+  {word:"jocular",meaning:"冗談好きな・ひょうきんな",mnemonic:"jocul(冗談)+ar→冗談を言う",etymology:"ラテン語 jocularis「冗談の」"},
+  {word:"judicious",meaning:"賢明な・分別のある",mnemonic:"judici(判断)+ous→判断力がある",etymology:"ラテン語 judicium「判断」"},
+  {word:"juxtapose",meaning:"並置する・対比させる",mnemonic:"juxta(隣に)+pose(置く)→隣に置いて比べる",etymology:"ラテン語 juxta「隣に」+ponere「置く」"},
+  {word:"kindle",meaning:"（火・感情を）点火する",mnemonic:"kind(種類)+le→感情の種に火をつける",etymology:"古ノルド語 kynda「火をつける」"},
+  {word:"knave",meaning:"悪党・不正直者",mnemonic:"knave(召使い)→不正直な召使い",etymology:"古英語 cnafa「少年・召使い」"},
+  {word:"labyrinthine",meaning:"迷宮のような・複雑な",mnemonic:"labyrinth(迷宮)+ine→迷宮のような",etymology:"ギリシャ語 labyrinthos「迷宮」"},
+  {word:"lachrymose",meaning:"涙もろい・悲しげな",mnemonic:"lachry(涙)+mose→涙っぽい",etymology:"ラテン語 lacrima「涙」"},
+  {word:"lackey",meaning:"腰巾着・おべっか使い",mnemonic:"lack(欠ける)+ey→自分の意思が欠けた従者",etymology:"フランス語 laquais「従者」"},
+  {word:"lambaste",meaning:"激しく批判する・たたきのめす",mnemonic:"lam(打つ)+baste(縫う)→打ちのめす",etymology:"lam「打つ」+baste「叩く」"},
+  {word:"lampoon",meaning:"風刺する・嘲笑的な批判",mnemonic:"lamp(明かり)+oon→明かりで照らして風刺する",etymology:"フランス語 lampon「飲もう」（風刺歌の囃子詞）"},
+  {word:"lassitude",meaning:"倦怠感・疲労感",mnemonic:"lassi(疲れた)+tude→疲れた状態",etymology:"ラテン語 lassitudo「疲労」"},
+  {word:"latent",meaning:"潜在的な・隠れた",mnemonic:"lat(隠れる)+ent→隠れている",etymology:"ラテン語 latere「隠れる」"},
+  {word:"laudatory",meaning:"賞賛の・称賛する",mnemonic:"laud(賞賛)+atory→賞賛する性質",etymology:"ラテン語 laudare「賞賛する」"},
+  {word:"lax",meaning:"緩い・だらしない",mnemonic:"lax(緩い)→緩んでいる",etymology:"ラテン語 laxus「緩い」"},
+  {word:"lethargic",meaning:"無気力な・眠たげな",mnemonic:"lethar(忘れる)+gic→忘却のように無気力",etymology:"ギリシャ語 lethargia「無気力」"},
+  {word:"levity",meaning:"軽率さ・不真面目さ",mnemonic:"levi(軽い)+ty→軽い態度",etymology:"ラテン語 levitas「軽さ」"},
+  {word:"litigious",meaning:"訴訟好きな・争い好きな",mnemonic:"litig(訴訟)+ious→訴訟好き",etymology:"ラテン語 litigiosus「争い好き」"},
+  {word:"lofty",meaning:"高尚な・高慢な",mnemonic:"loft(高い場所)+y→高みにある",etymology:"古ノルド語 lopt「空・屋根裏」"},
+  {word:"lucid",meaning:"明晰な・分かりやすい",mnemonic:"luc(光)+id→光のように明晰",etymology:"ラテン語 lucidus「明るい」"},
+  {word:"lucrative",meaning:"利益の多い・もうかる",mnemonic:"lucr(利益)+ative→利益をもたらす",etymology:"ラテン語 lucrum「利益」"},
+  {word:"lurid",meaning:"（色・内容が）けばけばしい・衝撃的な",mnemonic:"lurid(青白い・けばけばしい)→不気味な色",etymology:"ラテン語 luridus「青白い・不気味な」"},
+  {word:"machination",meaning:"陰謀・策略",mnemonic:"machin(機械)+ation→機械のように精密な陰謀",etymology:"ラテン語 machinari「たくらむ」"},
+  {word:"magnanimous",meaning:"寛大な・度量が大きい",mnemonic:"magna(大きい)+animus(心)→大きな心",etymology:"ラテン語 magnanimitas「寛大さ」"},
+  {word:"maladroit",meaning:"不器用な・気の利かない",mnemonic:"mal(悪い)+adroit(器用)→器用でない",etymology:"フランス語 mal「悪く」+adroit「器用な」"},
+  {word:"malaise",meaning:"不快感・倦怠感",mnemonic:"mal(悪い)+aise(楽・仏語)→楽でない不快感",etymology:"フランス語 malaise「不快感」"},
+  {word:"malediction",meaning:"呪い・悪口",mnemonic:"male(悪い)+dict(言う)+ion→悪いことを言う",etymology:"ラテン語 maledicere「悪く言う」"},
+  {word:"malicious",meaning:"悪意のある・意地悪な",mnemonic:"mali(悪い)+cious→悪意がある",etymology:"ラテン語 malitia「悪意」"},
+  {word:"malignant",meaning:"悪性の・有害な",mnemonic:"malign(悪い)+ant→悪影響を与える",etymology:"ラテン語 malignus「悪意のある」"},
+  {word:"manifest",meaning:"明白な・明らかにする",mnemonic:"mani(手)+fest(打つ)→手で打つように明白",etymology:"ラテン語 manifestus「明らかな」"},
+  {word:"manipulate",meaning:"巧みに操る・操作する",mnemonic:"mani(手)+pulate(動かす)→手で動かす",etymology:"ラテン語 manipulus「一掴み」"},
+  {word:"martyr",meaning:"殉教者・苦難を受ける人",mnemonic:"martyr(証人)→信仰のための証人",etymology:"ギリシャ語 martys「証人」"},
+  {word:"maudlin",meaning:"感傷的な・めそめそした",mnemonic:"maudlin(マグダラのマリア)→泣き崩れた聖女のよう",etymology:"Maudlin（Magdalene マグダラのマリア）の転訛"},
+  {word:"maverick",meaning:"独立した・型破りな人",mnemonic:"maverick(人名)→烙印を押さない牛の所有者",etymology:"Samuel Maverick（牛を所有したテキサスの開拓者）"},
+  {word:"mawkish",meaning:"感傷的すぎる・気持ち悪い",mnemonic:"mawk(ウジ虫)+ish→ウジ虫のように気持ち悪い",etymology:"古ノルド語 mathkr「ウジ虫」"},
+  {word:"meander",meaning:"曲がりくねって流れる・さまよう",mnemonic:"meander(川の名前)→曲がりくねった川の流れ",etymology:"ギリシャ語 Maiandros「蛇行する川」"},
+  {word:"meddlesome",meaning:"おせっかいな・干渉的な",mnemonic:"meddle(干渉)+some→干渉ばかりする",etymology:"古フランス語 medler「混ぜる・干渉する」"},
+  {word:"melancholy",meaning:"憂鬱・悲哀",mnemonic:"melan(黒)+choly(胆汁)→黒い胆汁が憂鬱を生む",etymology:"ギリシャ語 melancholia「黒胆汁症」"},
+  {word:"mendacity",meaning:"嘘つき・不誠実さ",mnemonic:"mendac(嘘)+ity→嘘をつく性質",etymology:"ラテン語 mendax「嘘つき」"},
+  {word:"mendicant",meaning:"托鉢僧・物乞い",mnemonic:"mendic(物乞い)+ant→物乞いをする",etymology:"ラテン語 mendicare「物乞いをする」"},
+  {word:"mercenary",meaning:"傭兵・金目当ての",mnemonic:"merces(報酬)+nary→報酬のために戦う",etymology:"ラテン語 mercenarius「賃金のために働く」"},
+  {word:"meretricious",meaning:"けばけばしい・見かけ倒しの",mnemonic:"meretric(売春婦)+ious→売春婦のように外見だけ",etymology:"ラテン語 meretrix「売春婦」"},
+  {word:"milieu",meaning:"環境・社会的背景",mnemonic:"mil(中間)+ieu(場所・仏語)→中間の場所",etymology:"フランス語 milieu「中間・環境」"},
+  {word:"misanthropic",meaning:"人間嫌いの",mnemonic:"mis(嫌い)+anthropic(人間)→人間嫌い",etymology:"ギリシャ語 misanthropos「人間嫌い」"},
+  {word:"miser",meaning:"守銭奴・けちんぼ",mnemonic:"miser(みじめ)→金を失うとみじめになる",etymology:"ラテン語 miser「惨めな」"},
+  {word:"misnomer",meaning:"誤った名称・呼び違い",mnemonic:"mis(誤り)+nomer(名前)→誤った名前",etymology:"古フランス語 mesnommer「名前を間違える」"},
+  {word:"misogynist",meaning:"女性嫌い・女性蔑視者",mnemonic:"miso(嫌い)+gynist(女性)→女性嫌い",etymology:"ギリシャ語 misogynes「女性嫌い」"},
+  {word:"modicum",meaning:"少量・わずか",mnemonic:"modi(方法)+cum→ほんの少しの方法",etymology:"ラテン語 modicus「適度な」"},
+  {word:"momentous",meaning:"重大な・重要な",mnemonic:"moment(瞬間)+ous→その瞬間が重大",etymology:"ラテン語 momentum「勢い・重要性」"},
+  {word:"mordant",meaning:"辛辣な・皮肉な",mnemonic:"mord(かむ)+ant→かみつくような辛辣さ",etymology:"フランス語 mordant「かむ」"},
+  {word:"motley",meaning:"雑多な・ごたまぜの",mnemonic:"motley(まだら模様)→バラバラな集まり",etymology:"おそらく mot「斑点」から"},
+  {word:"mundane",meaning:"平凡な・日常的な",mnemonic:"mund(世界)+ane→この世の普通のこと",etymology:"ラテン語 mundus「世界」"},
+  {word:"mutable",meaning:"変わりやすい・移り変わる",mnemonic:"mut(変わる)+able→変わることができる",etymology:"ラテン語 mutare「変える」"},
+  {word:"myopic",meaning:"近視眼的な・先見の明のない",mnemonic:"myo(閉じる)+pic(見る)→目を細めて見る近視",etymology:"ギリシャ語 myops「近視の」"},
+  {word:"nascent",meaning:"発生しつつある・初期の",mnemonic:"nasc(生まれる)+ent→生まれたばかりの",etymology:"ラテン語 nasci「生まれる」"},
+  {word:"nebulous",meaning:"漠然とした・霧のような",mnemonic:"nebu(霧)+lous→霧のように漠然とした",etymology:"ラテン語 nebula「霧・雲」"},
+  {word:"neophyte",meaning:"初心者・新参者",mnemonic:"neo(新しい)+phyte(植物)→新しく芽吹いた植物",etymology:"ギリシャ語 neophytos「新しく植えられた」"},
+  {word:"nepotism",meaning:"縁故主義・えこひいき",mnemonic:"nepo(甥)+tism→甥を優遇する",etymology:"イタリア語 nepotismo「甥への優遇」"},
+  {word:"nihilism",meaning:"虚無主義・ニヒリズム",mnemonic:"nihil(何もない)+ism→何もないという主義",etymology:"ラテン語 nihil「何もない」"},
+  {word:"nocturnal",meaning:"夜の・夜行性の",mnemonic:"noctur(夜)+nal→夜の",etymology:"ラテン語 nox「夜」"},
+  {word:"nominal",meaning:"名目上の・わずかな",mnemonic:"nomin(名前)+al→名前だけの",etymology:"ラテン語 nomen「名前」"},
+  {word:"nonplussed",meaning:"当惑した・困惑した",mnemonic:"non+plus(これ以上)→これ以上どうしようもない",etymology:"ラテン語 non plus「これ以上ない」"},
+  {word:"nostalgic",meaning:"郷愁の・懐かしい",mnemonic:"nostal(故郷)+gic→故郷を懐かしむ",etymology:"ギリシャ語 nostos「帰還」+algos「痛み」"},
+  {word:"noxious",meaning:"有害な・有毒な",mnemonic:"nox(害)+ious→害がある",etymology:"ラテン語 noxius「有害な」"},
+  {word:"nuance",meaning:"微妙な違い・ニュアンス",mnemonic:"nuan(雲)+ce→雲のような微妙な違い",etymology:"フランス語 nuance「色合い・陰影」"},
+  {word:"obfuscate",meaning:"混乱させる・曖昧にする",mnemonic:"ob+fusc(暗い)+ate→暗くして混乱させる",etymology:"ラテン語 obfuscare「暗くする」"},
+  {word:"oblique",meaning:"間接的な・斜めの",mnemonic:"ob+lique(曲がった)→斜めに曲がった",etymology:"ラテン語 obliquus「斜めの」"},
+  {word:"obliterate",meaning:"完全に消す・壊滅させる",mnemonic:"ob+liter(文字)+ate→文字を消す",etymology:"ラテン語 obliterare「消し去る」"},
+  {word:"obstreperous",meaning:"騒々しい・手に負えない",mnemonic:"ob+strep(騒音)+erous→騒音を立てる",etymology:"ラテン語 obstreperus「やかましい」"},
+  {word:"officious",meaning:"おせっかいな・出しゃばりの",mnemonic:"offici(職務)+ous→職務を超えておせっかい",etymology:"ラテン語 officiosus「親切な・おせっかいな」"},
+  {word:"omniscient",meaning:"全知の・何でも知っている",mnemonic:"omni(全て)+scient(知る)→全てを知る",etymology:"ラテン語 omnis「全て」+scire「知る」"},
+  {word:"opaque",meaning:"不透明な・分かりにくい",mnemonic:"op+aque(暗い)→暗くて見えない",etymology:"ラテン語 opacus「暗い・不透明な」"},
+  {word:"opprobrium",meaning:"恥辱・公的な非難",mnemonic:"op+probri(恥)+um→恥の言葉",etymology:"ラテン語 opprobrium「恥辱」"},
+  {word:"ostracize",meaning:"追放する・仲間外れにする",mnemonic:"ostraci(貝殻)+ze→貝殻投票で追放する",etymology:"ギリシャ語 ostrakismos「陶片追放」"},
+  {word:"overwrought",meaning:"興奮しすぎた・過度に手の込んだ",mnemonic:"over+wrought(作られた)→作り込みすぎた",etymology:"over-+wrought「作られた」"},
+  {word:"pacify",meaning:"なだめる・平和にする",mnemonic:"paci(平和)+fy→平和にする",etymology:"ラテン語 pax「平和」"},
+  {word:"painstaking",meaning:"骨の折れる・丹念な",mnemonic:"pain(苦労)+staking(賭ける)→苦労を賭けて丹念に",etymology:"pains「苦労」+taking「取る」"},
+  {word:"palliate",meaning:"和らげる・緩和する",mnemonic:"palli(マント)+ate→マントで隠して和らげる",etymology:"ラテン語 palliare「マントで覆う」"},
+  {word:"pallid",meaning:"青ざめた・生気のない",mnemonic:"pall(覆い)+id→覆いで日が当たらず青白い",etymology:"ラテン語 pallidus「青白い」"},
+  {word:"paradigm",meaning:"典型・模範・パラダイム",mnemonic:"para(横)+digm(示す)→横に示した模範",etymology:"ギリシャ語 paradeigma「手本・模範」"},
+  {word:"paradox",meaning:"逆説・矛盾",mnemonic:"para(反する)+dox(意見)→通常の意見に反する",etymology:"ギリシャ語 paradoxon「信じ難いこと」"},
+  {word:"pariah",meaning:"のけ者・社会的追放者",mnemonic:"pariah(太鼓たたき)→インド最下層カーストの人",etymology:"タミル語 paraiyan「太鼓たたき」"},
+  {word:"parody",meaning:"パロディ・模倣作品",mnemonic:"par(並べて)+ody(歌)→並べて作った模倣",etymology:"ギリシャ語 parodia「対抗する歌」"},
+  {word:"pathological",meaning:"病的な・異常な",mnemonic:"patho(病気)+logical→病気の論理",etymology:"ギリシャ語 pathos「病気・苦しみ」"},
+  {word:"patronize",meaning:"（見下した態度で）扱う・利用する",mnemonic:"patron(後援者)+ize→後援者ぶった態度を取る",etymology:"ラテン語 pater「父」"},
+  {word:"paucity",meaning:"不足・乏しさ",mnemonic:"pau(少ない)+city→少ない量",etymology:"ラテン語 paucitas「少なさ」"},
+  {word:"peccadillo",meaning:"小さな罪・ちょっとした過ち",mnemonic:"pecc(罪)+adillo(小さい)→小さな罪",etymology:"スペイン語 pecadillo「小さな罪」"},
+  {word:"pejorative",meaning:"軽蔑的な・悪い意味合いの",mnemonic:"pejor(より悪い)+ative→より悪い意味を持つ",etymology:"ラテン語 pejorare「悪化させる」"},
+  {word:"penury",meaning:"極貧・赤貧",mnemonic:"pen(欠乏)+ury→欠乏した状態",etymology:"ラテン語 penuria「欠乏」"},
+  {word:"perennial",meaning:"永続的な・多年生の",mnemonic:"per(通して)+ennial(年)→年を通して続く",etymology:"ラテン語 perennis「一年中続く」"},
+  {word:"perfunctory",meaning:"おざなりの・形式的な",mnemonic:"per+funct(機能)+ory→最低限機能するだけ",etymology:"ラテン語 perfungi「果たし終える」"},
+  {word:"perspicacious",meaning:"洞察力のある・鋭い",mnemonic:"perspicac(見通す)+ious→見通す力がある",etymology:"ラテン語 perspicax「鋭い洞察力を持つ」"},
+  {word:"pertinacious",meaning:"粘り強い・頑固な",mnemonic:"per+tenaci(持続)+ous→持続し続ける",etymology:"ラテン語 pertinax「しがみつく」"},
+  {word:"perturb",meaning:"動揺させる・乱す",mnemonic:"per+turb(かき乱す)→完全にかき乱す",etymology:"ラテン語 perturbare「かき乱す」"},
+  {word:"pervasive",meaning:"広く行き渡った・普及した",mnemonic:"per+vas(行く)+ive→いたるところに行き渡る",etymology:"ラテン語 pervadere「広まる」"},
+  {word:"philistine",meaning:"文化に疎い・俗物的な",mnemonic:"Philistine(ペリシテ人)→芸術を解さない俗物",etymology:"ペリシテ人 Philistines（古代の好戦的民族）"},
+  {word:"phlegmatic",meaning:"無気力な・冷静な",mnemonic:"phlegm(痰)+atic→痰のように動かない",etymology:"ギリシャ語 phlegma「痰・無気力」"},
+  {word:"pious",meaning:"敬虔な・信心深い",mnemonic:"pi(敬虔)+ous→敬虔な",etymology:"ラテン語 pius「敬虔な」"},
+  {word:"pithy",meaning:"簡潔で力強い・要点をついた",mnemonic:"pith(髄)+y→芯がある簡潔さ",etymology:"古英語 piþa「髄・芯」"},
+  {word:"placid",meaning:"穏やかな・平静な",mnemonic:"plac(穏やか)+id→穏やかな",etymology:"ラテン語 placidus「穏やかな」"},
+  {word:"plebeian",meaning:"庶民の・平凡な",mnemonic:"plebe(平民)+ian→平民のような",etymology:"ラテン語 plebs「一般市民」"},
+  {word:"plethora",meaning:"過多・余剰",mnemonic:"plethor(充満)+a→充満しすぎた状態",etymology:"ギリシャ語 plethore「充満」"},
+  {word:"poignant",meaning:"胸を打つ・刺すような",mnemonic:"poign(刺す)+ant→刺すような感動",etymology:"古フランス語 poindre「刺す」"},
+  {word:"pompous",meaning:"尊大な・大げさな",mnemonic:"pomp(威厳)+ous→威厳をひけらかす",etymology:"ラテン語 pompa「行列・見せ物」"},
+  {word:"ponderous",meaning:"重い・重苦しい",mnemonic:"ponder(重さ)+ous→重さがある",etymology:"ラテン語 ponderosus「重い」"},
+  {word:"portentous",meaning:"不吉な・重大な予兆の",mnemonic:"portent(前兆)+ous→前兆となる",etymology:"ラテン語 portentum「前兆」"},
+  {word:"precipitous",meaning:"急峻な・性急な",mnemonic:"precipit(崖)+ous→崖のような急さ",etymology:"ラテン語 praeceps「頭から落ちる」"},
+  {word:"precocious",meaning:"早熟な・大人びた",mnemonic:"pre(前)+cocious(熟す)→早く熟す",etymology:"ラテン語 praecox「早熟な」"},
+  {word:"predatory",meaning:"略奪的な・捕食性の",mnemonic:"predat(略奪)+ory→略奪する",etymology:"ラテン語 praedari「略奪する」"},
+  {word:"preeminent",meaning:"卓越した・傑出した",mnemonic:"pre+eminent(著名)→著名の中でも特に",etymology:"ラテン語 praeminere「突き出る」"},
+  {word:"prerogative",meaning:"特権・専有権",mnemonic:"pre+rogative(要求)→事前に要求できる特権",etymology:"ラテン語 praerogativa「優先的投票権」"},
+  {word:"presumptuous",meaning:"図々しい・横柄な",mnemonic:"pre+sumpt(取る)+uous→前もって取り過ぎる",etymology:"ラテン語 praesumere「前もって取る」"},
+  {word:"pretentious",meaning:"気取った・見栄を張る",mnemonic:"pretent(主張)+ious→実力以上に主張する",etymology:"ラテン語 praetendere「見せかける」"},
+  {word:"pristine",meaning:"元のままの・汚れのない",mnemonic:"pristine(原始の)→原始のままの状態",etymology:"ラテン語 pristinus「元の・昔の」"},
+  {word:"probity",meaning:"誠実さ・高潔さ",mnemonic:"prob(証明)+ity→証明された誠実さ",etymology:"ラテン語 probitas「誠実さ」"},
+  {word:"proclivity",meaning:"（悪い）傾向・癖",mnemonic:"pro+clivity(傾き)→前に傾く傾向",etymology:"ラテン語 proclivitas「傾向」"},
+  {word:"prodigal",meaning:"浪費する・放蕩な",mnemonic:"prodi(前に)+gal(追いやる)→お金を前に追いやる",etymology:"ラテン語 prodigus「浪費する」"},
+  {word:"prodigious",meaning:"驚異的な・巨大な",mnemonic:"prodig(驚異)+ious→驚異的な",etymology:"ラテン語 prodigiosus「前兆となる・驚異的な」"},
+  {word:"propensity",meaning:"傾向・性癖",mnemonic:"pro+pens(重さ)+ity→前に重さがかかる傾向",etymology:"ラテン語 propensus「傾いた」"},
+  {word:"pugnacious",meaning:"好戦的な・けんか好きの",mnemonic:"pugn(拳)+acious→拳で戦う好戦的さ",etymology:"ラテン語 pugnax「けんか好きの」"},
+  {word:"pungent",meaning:"（においが）刺激的な・辛辣な",mnemonic:"pung(刺す)+ent→鼻を刺す臭い",etymology:"ラテン語 pungere「刺す」"},
+  {word:"pusillanimous",meaning:"臆病な・小心な",mnemonic:"pusill(小さい)+animous(心)→小さな心",etymology:"ラテン語 pusillanimis「小心な」"},
+  {word:"putative",meaning:"一般に…とされている・推定上の",mnemonic:"put(考える)+ative→みんなが考える推定",etymology:"ラテン語 putare「考える」"},
+  {word:"quibble",meaning:"些細なことにこだわる・難癖をつける",mnemonic:"quib(ずるい言葉)+ble→ずるい言葉で難癖",etymology:"おそらくラテン語 quibus「誰に（法律文書の言葉）」"},
+  {word:"quiescent",meaning:"静止した・不活発な",mnemonic:"quiesc(静まる)+ent→静まり返った",etymology:"ラテン語 quiescere「休む」"},
+  {word:"rancor",meaning:"深い恨み・悪意",mnemonic:"ranc(腐る)+or→腐った恨み",etymology:"ラテン語 rancor「腐臭・悪意」"},
+  {word:"rapacious",meaning:"強欲な・貪欲な",mnemonic:"rap(奪う)+acious→奪い取る貪欲さ",etymology:"ラテン語 rapax「貪欲な」"},
+  {word:"raucous",meaning:"しわがれた・騒々しい",mnemonic:"raucous(しわがれた)→しわがれた騒音",etymology:"ラテン語 raucus「しゃがれた」"},
+  {word:"recant",meaning:"（以前の発言を）撤回する",mnemonic:"re+cant(歌う)→歌い直す→発言を撤回する",etymology:"ラテン語 recantare「歌い直す」"},
+  {word:"recrimination",meaning:"逆に非難すること・言い返し",mnemonic:"re+crimin(罪)+ation→罪を言い返す",etymology:"ラテン語 recriminari「言い返す」"},
+  {word:"refute",meaning:"論破する・反証する",mnemonic:"re+fute(打つ)→打ち返して論破する",etymology:"ラテン語 refutare「打ち返す」"},
+  {word:"relegate",meaning:"降格させる・左遷する",mnemonic:"re+legate(使節)→使節を送り返す",etymology:"ラテン語 relegare「追い払う」"},
+  {word:"rend",meaning:"引き裂く・引き裂かれる",mnemonic:"rend(引き裂く)→引き裂く",etymology:"古英語 rendan「引き裂く」"},
+  {word:"reprehensible",meaning:"非難に値する・けしからぬ",mnemonic:"reprehens(捕まえる)+ible→捕まえて非難できる",etymology:"ラテン語 reprehendere「非難する」"},
+  {word:"rescind",meaning:"（法律・契約を）廃止する",mnemonic:"re+scind(切る)→切り取って廃止する",etymology:"ラテン語 rescindere「切り取る」"},
+  {word:"resilient",meaning:"回復力のある・弾力性のある",mnemonic:"resili(跳び返る)+ent→跳ね返る力",etymology:"ラテン語 resilire「跳び返る」"},
+  {word:"reverence",meaning:"崇拝・深い敬意",mnemonic:"rever(崇める)+ence→崇める気持ち",etymology:"ラテン語 reverentia「敬意」"},
+  {word:"ribald",meaning:"下品な・わいせつな",mnemonic:"ribal(ならず者)+d→ならず者のような下品さ",etymology:"古フランス語 ribaut「ならず者」"},
+  {word:"rigorous",meaning:"厳格な・厳しい",mnemonic:"rigor(硬直)+ous→硬直したような厳しさ",etymology:"ラテン語 rigor「硬直・厳格」"},
+  {word:"rogue",meaning:"悪党・ならず者",mnemonic:"rogue(ならず者)→悪党",etymology:"おそらくラテン語 rogare「物乞いする」"},
+  {word:"ruse",meaning:"策略・罠",mnemonic:"ruse(迂回)→迂回した策略",etymology:"古フランス語 reüser「退く・迂回する」"},
+  {word:"ruthless",meaning:"冷酷な・無慈悲な",mnemonic:"ruth(哀れみ)+less→哀れみがない",etymology:"古英語 hreowan「後悔する」+less「ない」"},
+  {word:"sacrosanct",meaning:"神聖不可侵の・絶対的な",mnemonic:"sacro(神聖)+sanct(神聖)→二重に神聖",etymology:"ラテン語 sacrosanctus「神聖不可侵の」"},
+  {word:"salutary",meaning:"有益な・教訓的な",mnemonic:"salut(健康)+ary→健康に良い→有益な",etymology:"ラテン語 salutaris「健康に良い」"},
+  {word:"sanguine",meaning:"楽観的な・血色のよい",mnemonic:"sangui(血)+ne→血の巡りがよく楽観的",etymology:"ラテン語 sanguis「血」"},
+  {word:"scathing",meaning:"痛烈な・辛辣な",mnemonic:"scath(傷つける)+ing→傷つけるような批判",etymology:"古ノルド語 skadha「傷つける」"},
+  {word:"secular",meaning:"世俗的な・非宗教的な",mnemonic:"secul(時代)+ar→時代の（宗教でない）",etymology:"ラテン語 saeculum「世代・時代」"},
+  {word:"sedulous",meaning:"勤勉な・粘り強い",mnemonic:"sedul(絶えず)+ous→絶えず努力する",etymology:"ラテン語 sedulus「勤勉な」"},
+  {word:"servile",meaning:"奴隷的な・卑屈な",mnemonic:"serv(奴隷)+ile→奴隷のような",etymology:"ラテン語 servilis「奴隷の」"},
+  {word:"shrewd",meaning:"抜け目ない・賢い",mnemonic:"shrew(トガリネズミ)+d→トガリネズミのように鋭い",etymology:"中英語 shrewe「悪党」"},
+  {word:"signify",meaning:"意味する・重要である",mnemonic:"sign(サイン)+ify→サインを作る",etymology:"ラテン語 significare「意味する」"},
+  {word:"sinister",meaning:"不吉な・邪悪な",mnemonic:"sinister(左)→左は不吉（中世の迷信）",etymology:"ラテン語 sinister「左の・不吉な」"},
+  {word:"skeptical",meaning:"懐疑的な・疑い深い",mnemonic:"skep(考える)+tical→考えすぎて疑う",etymology:"ギリシャ語 skeptikos「考える人」"},
+  {word:"slander",meaning:"中傷する・誹謗する",mnemonic:"sland(汚す)+er→名誉を汚す言葉",etymology:"古フランス語 esclandre「スキャンダル」"},
+  {word:"sober",meaning:"しらふの・真剣な",mnemonic:"sober(酔っていない)→酔っていない・冷静",etymology:"ラテン語 sobrius「しらふの」"},
+  {word:"solemn",meaning:"厳粛な・真剣な",mnemonic:"solemn(荘厳)→荘厳な態度",etymology:"ラテン語 sollemnis「定期的な・厳粛な」"},
+  {word:"solicitous",meaning:"心配する・気にかける",mnemonic:"solicit(勧誘)+ous→しきりに気にかける",etymology:"ラテン語 sollicitus「不安な」"},
+  {word:"sordid",meaning:"汚い・卑劣な",mnemonic:"sord(汚れ)+id→汚れた",etymology:"ラテン語 sordidus「汚い」"},
+  {word:"squalid",meaning:"汚い・みじめな",mnemonic:"squal(汚れ)+id→汚れた状態",etymology:"ラテン語 squalidus「汚い」"},
+  {word:"stagnant",meaning:"停滞した・よどんだ",mnemonic:"stagn(沼)+ant→沼のように停滞した",etymology:"ラテン語 stagnum「沼」"},
+  {word:"steadfast",meaning:"揺るぎない・確固とした",mnemonic:"stead(場所)+fast(固定)→場所に固定された",etymology:"古英語 stedefæst「不動の」"},
+  {word:"stern",meaning:"厳しい・厳格な",mnemonic:"stern(厳しい)→厳格な態度",etymology:"古英語 styrne「厳しい」"},
+  {word:"stigma",meaning:"汚名・烙印",mnemonic:"stigm(刺し傷)+a→刺された跡が汚名",etymology:"ギリシャ語 stigma「刺し傷・烙印」"},
+  {word:"stoic",meaning:"禁欲的な・感情を表さない",mnemonic:"stoa(柱廊)→ストア哲学の教え",etymology:"ギリシャ語 Stoa「柱廊」"},
+  {word:"stringent",meaning:"厳しい・厳格な",mnemonic:"string(締める)+ent→締め付けるような厳しさ",etymology:"ラテン語 stringere「締める」"},
+  {word:"stupefy",meaning:"呆然とさせる・麻痺させる",mnemonic:"stupe(鈍い)+fy→鈍くする",etymology:"ラテン語 stupere「唖然とする」"},
+  {word:"suave",meaning:"洗練された・愛想のよい",mnemonic:"suave(甘い・仏語)→甘い言葉で洗練された",etymology:"フランス語 suave「甘い・心地よい」"},
+  {word:"subversive",meaning:"体制を覆そうとする・破壊的な",mnemonic:"sub+vers(ひっくり返す)+ive→下からひっくり返す",etymology:"ラテン語 subvertere「ひっくり返す」"},
+  {word:"succinct",meaning:"簡潔な・端的な",mnemonic:"suc+cinct(帯で締める)→帯で締めたように簡潔",etymology:"ラテン語 succinctus「帯で締めた」"},
+  {word:"sultry",meaning:"蒸し暑い・官能的な",mnemonic:"sultr(焦がす)+y→焦がすような暑さ",etymology:"古英語 sweltan「蒸し暑い」"},
+  {word:"supercilious",meaning:"人を見下した・横柄な",mnemonic:"super+cili(眉毛)+ous→眉毛を上げて見下す",etymology:"ラテン語 supercilium「眉毛・傲慢さ」"},
+  {word:"superfluous",meaning:"余分な・不必要な",mnemonic:"super(超える)+flu(流れる)+ous→あふれ出る余分さ",etymology:"ラテン語 superfluus「あふれ出る」"},
+  {word:"taciturn",meaning:"無口な・寡黙な",mnemonic:"tacit(黙っている)+urn→黙ったまま",etymology:"ラテン語 taciturnus「無口な」"},
+  {word:"tantalize",meaning:"じらす・焦らす",mnemonic:"Tantalus(タンタロス)+ize→タンタロスのようにじらされる",etymology:"ギリシャ神話の Tantalus「タンタロス」から"},
+  {word:"tautology",meaning:"同語反復・冗語",mnemonic:"tauto(同じ)+logy(言葉)→同じ言葉を繰り返す",etymology:"ギリシャ語 tautologia「同じことを言う」"},
+  {word:"tendentious",meaning:"偏った・特定の目的を持つ",mnemonic:"tend(傾く)+entious→傾いた意見",etymology:"ドイツ語 tendenziös「傾向がある」"},
+  {word:"timorous",meaning:"臆病な・おびえた",mnemonic:"timor(恐れ)+ous→恐れがちな",etymology:"ラテン語 timor「恐れ」"},
+  {word:"tortuous",meaning:"曲がりくねった・複雑な",mnemonic:"tort(ねじる)+uous→ねじれた",etymology:"ラテン語 tortuosus「曲がりくねった」"},
+  {word:"treacherous",meaning:"裏切りの・危険な",mnemonic:"treach(裏切り)+erous→裏切りの",etymology:"古フランス語 trichier「だます」"},
+  {word:"turpitude",meaning:"堕落・卑劣さ",mnemonic:"turp(卑しい)+itude→卑しい状態",etymology:"ラテン語 turpis「恥ずべき」"},
+  {word:"tyranny",meaning:"暴政・独裁政治",mnemonic:"tyran(暴君)+ny→暴君の支配",etymology:"ギリシャ語 tyrannia「専制支配」"},
+  {word:"unequivocal",meaning:"明確な・疑いのない",mnemonic:"un+equivocal(曖昧)→曖昧でない",etymology:"un-（否定）+equivocal「曖昧な」"},
+  {word:"untenable",meaning:"維持できない・弁護できない",mnemonic:"un+ten(保つ)+able→保てない",etymology:"un-（否定）+tenable「保てる」"},
+  {word:"unwarranted",meaning:"根拠のない・不当な",mnemonic:"un+warranted(保証)→保証されていない",etymology:"un-（否定）+warranted「保証された」"},
+  {word:"utilitarian",meaning:"功利主義的な・実用的な",mnemonic:"utilit(有用)+arian→有用性を重視する",etymology:"ラテン語 utilis「有用な」"},
+  {word:"vacuous",meaning:"空虚な・頭が空の",mnemonic:"vacu(空)+ous→空っぽな",etymology:"ラテン語 vacuus「空の」"},
+  {word:"venality",meaning:"腐敗・金で動くこと",mnemonic:"venal(売られる)+ity→金で動く性質",etymology:"ラテン語 venalis「売り物の」"},
+  {word:"vexatious",meaning:"いらいらさせる・煩わしい",mnemonic:"vex(いらいらさせる)+atious→いらいらさせる",etymology:"ラテン語 vexare「苦しめる」"},
+  {word:"vindicate",meaning:"（汚名を）晴らす・正当化する",mnemonic:"vindic(主張)+ate→正当性を主張する",etymology:"ラテン語 vindicare「主張する」"},
+  {word:"virulent",meaning:"猛毒の・激烈な",mnemonic:"virul(毒)+ent→毒がある",etymology:"ラテン語 virulentus「毒のある」"},
+  {word:"vitriolic",meaning:"腐食性の・辛辣な",mnemonic:"vitriol(硫酸)+ic→硫酸のように腐食する",etymology:"ラテン語 vitriolum「硫酸塩」"},
+  {word:"vituperate",meaning:"激しく非難する・口汚く罵る",mnemonic:"vitup(悪口)+erate→悪口を言い続ける",etymology:"ラテン語 vituperare「非難する」"},
+  {word:"vociferous",meaning:"声高に叫ぶ・やかましい",mnemonic:"voci(声)+ferous(運ぶ)→声を大きく運ぶ",etymology:"ラテン語 vox「声」+ferre「運ぶ」"},
+  {word:"vulnerable",meaning:"傷つきやすい・脆弱な",mnemonic:"vulner(傷)+able→傷つきやすい",etymology:"ラテン語 vulnus「傷」"},
+  {word:"wane",meaning:"（月が）欠ける・衰退する",mnemonic:"wane(欠ける)→月が欠けるように衰える",etymology:"古英語 wanian「減る」"},
+  {word:"zenith",meaning:"頂点・絶頂",mnemonic:"zeni(上)+th→最上点",etymology:"アラビア語 samt「方向」"},
+  {word:"zeal",meaning:"熱意・熱心さ",mnemonic:"zeal(熱心)→熱心さそのもの",etymology:"ギリシャ語 zelos「熱心」"},
+  {word:"abase",meaning:"（地位・品位を）落とす・卑しめる",mnemonic:"a+base(底)→底に落とす",etymology:"古フランス語 abaissier「下げる」"},
+  {word:"abdicate",meaning:"（王位・責任を）放棄する",mnemonic:"ab(離れて)+dicate(宣言)→宣言して離れる",etymology:"ラテン語 abdicare「放棄を宣言する」"},
+  {word:"aberration",meaning:"逸脱・異常",mnemonic:"ab(離れて)+erration(さまよい)→正道から逸れる",etymology:"ラテン語 aberrare「道に迷う」"},
+  {word:"abjection",meaning:"卑屈さ・悲惨な状態",mnemonic:"ab(下に)+ject(投げる)+ion→底に投げ捨てた状態",etymology:"ラテン語 abicere「投げ捨てる」"},
+  {word:"abnegate",meaning:"（権利・義務を）否定する・断念する",mnemonic:"ab+negate(否定)→完全に否定する",etymology:"ラテン語 abnegare「否定する」"},
+  {word:"abominate",meaning:"ひどく嫌う・嫌悪する",mnemonic:"ab+omin(前兆)+ate→不吉な前兆として嫌う",etymology:"ラテン語 abominari「不吉と見なす」"}
+];
+
+// ── Storage ────────────────────────────────────────────────────
+const KEY = 'eiken1_html_v1';
+function loadCards() { try { const r = localStorage.getItem(KEY); return r ? JSON.parse(r) : null; } catch { return null; } }
+function saveCards(c) { try { localStorage.setItem(KEY, JSON.stringify(c)); } catch {} }
+function makeCard(w, id) {
+  return {id, word: w.word, meaning: w.meaning, mnemonic: w.mnemonic||'', etymology: w.etymology||'',
+    interval: 1, repetitions: 0, easeFactor: 2.5, nextReview: 0, totalReviews: 0, correctCount: 0};
+}
+function buildInitial() { return WORDS.map((w, i) => makeCard(w, i + 1)); }
+function mergeNew(cards, newWords) {
+  const ex = new Set(cards.map(c => c.word.toLowerCase()));
+  let maxId = Math.max(...cards.map(c => c.id), 0);
+  const added = [];
+  newWords.forEach(w => {
+    if (w.word && w.meaning && !ex.has(w.word.toLowerCase())) {
+      maxId++;
+      added.push(makeCard(w, maxId));
+      ex.add(w.word.toLowerCase());
+    }
+  });
+  return [...cards, ...added];
+}
+
+// ── Helpers ────────────────────────────────────────────────────
+function getDue(cards) { return cards.filter(c => c.nextReview <= Date.now()); }
+function shuffle(a) {
+  const b = [...a];
+  for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i+1)); [b[i],b[j]]=[b[j],b[i]]; }
+  return b;
+}
+function getChoices(cards, correct) { return shuffle([correct, ...shuffle(cards.filter(c => c.id !== correct.id)).slice(0,3)]); }
+function mastery(card) {
+  if (!card.totalReviews) return {label:'未学習', color:'#475569'};
+  const r = card.correctCount / card.totalReviews;
+  if (r >= 0.9 && card.repetitions >= 3) return {label:'マスター', color:'#2dd4bf'};
+  if (r >= 0.7) return {label:'学習中', color:'#f59e0b'};
+  return {label:'要復習', color:'#f87171'};
+}
+
+// ── App State ──────────────────────────────────────────────────
+let cards = loadCards() || buildInitial();
+let tab = 'study';
+let mode = 'choice';
+let queue = [], qIdx = 0, phase = 'question';
+let choices = [], selected = null;
+let writeInput = '', writeResult = null;
+let sessionCorrect = 0, sessionWrong = 0;
+let sessionDone = false, showHint = false;
+let currentCard = null;
+let dashFilter = 'all', dashSearch = '';
+let csvText = '', importMsg = '', importMsgType = '';
+
+function persist() { saveCards(cards); }
+
+// ── Render ─────────────────────────────────────────────────────
+function render() {
+  document.getElementById('app').innerHTML = buildApp();
+  attachEvents();
+}
+
+function buildApp() {
+  const due = getDue(cards);
+  return `
+    <header>
+      <div class="logo">EIKEN 1級 Vocab</div>
+      <div class="header-info">${cards.length}語収録</div>
+    </header>
+    <div class="tabs">
+      <button class="tab-btn ${tab==='study'?'active':''}" onclick="switchTab('study')">学習</button>
+      <button class="tab-btn ${tab==='dashboard'?'active':''}" onclick="switchTab('dashboard')">ダッシュボード</button>
+      <button class="tab-btn ${tab==='import'?'active':''}" onclick="switchTab('import')">インポート</button>
+    </div>
+    <div class="container">
+      ${tab==='study' ? buildStudy(due) : ''}
+      ${tab==='dashboard' ? buildDashboard() : ''}
+      ${tab==='import' ? buildImport() : ''}
+    </div>`;
+}
+
+function buildStudy(due) {
+  let html = `<div class="mode-row">
+    <button class="btn ${mode==='choice'?'':'btn-ghost'}" style="padding:7px 16px;font-size:13px" onclick="switchMode('choice')">選択式</button>
+    <button class="btn ${mode==='write'?'':'btn-ghost'}" style="padding:7px 16px;font-size:13px" onclick="switchMode('write')">記述式</button>
+    <span class="due-count">復習: <b style="color:var(--teal)">${due.length}</b>件</span>
+  </div>`;
+
+  if (!queue.length && !sessionDone) {
+    html += `<div class="card center">
+      <div class="emoji-big">${due.length ? '📚' : '🎊'}</div>
+      <div class="card-title">${due.length ? due.length+'件の単語が待っています' : '今日の復習は完了！'}</div>
+      <div class="card-subtitle">SM-2アルゴリズムで最適タイミングで出題</div>
+      ${due.length
+        ? `<button class="btn" onclick="startSession()">スタート 🚀</button>`
+        : `<button class="btn btn-ghost" onclick="resetAll()">全単語をリセットして練習</button>`}
+    </div>`;
+    return html;
+  }
+
+  if (sessionDone) {
+    const total = sessionCorrect + sessionWrong;
+    const pct = total ? Math.round(sessionCorrect / total * 100) : 0;
+    html += `<div class="card center">
+      <div class="emoji-big">🎉</div>
+      <div class="card-title" style="font-size:20px;margin-bottom:14px">セッション完了！</div>
+      <div class="session-stats">
+        <div><div class="session-stat-val" style="color:var(--teal)">${sessionCorrect}</div><div class="session-stat-label">正解</div></div>
+        <div><div class="session-stat-val" style="color:var(--red)">${sessionWrong}</div><div class="session-stat-label">不正解</div></div>
+        <div><div class="session-stat-val" style="color:var(--purple)">${pct}%</div><div class="session-stat-label">正答率</div></div>
+      </div>
+      <button class="btn" onclick="backToTop()">戻る</button>
+    </div>`;
+    return html;
+  }
+
+  if (!currentCard) return html;
+  const pct = (qIdx / queue.length) * 100;
+  html += `<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
+  html += `<div class="counter-text">${qIdx+1} / ${queue.length}</div>`;
+  html += `<div class="card">`;
+  html += `<div class="word-display">${currentCard.word}</div>`;
+
+  if (phase === 'question') {
+    html += `<div class="center" style="margin-bottom:14px">
+      <button class="btn btn-ghost" style="padding:5px 14px;font-size:12px" onclick="toggleHint()">
+        ${showHint ? 'ヒントを隠す' : '💡 ヒントを見る'}
+      </button>
+    </div>`;
+    if (showHint && (currentCard.mnemonic || currentCard.etymology)) {
+      html += `<div class="hint-box">
+        ${currentCard.mnemonic ? `<div class="hint-mnemonic">💡 ${currentCard.mnemonic}</div>` : ''}
+        ${currentCard.etymology ? `<div class="hint-etymology">📖 ${currentCard.etymology}</div>` : ''}
+      </div>`;
+    }
+  }
+
+  if (phase === 'result' && (currentCard.mnemonic || currentCard.etymology)) {
+    html += `<div class="hint-box">
+      ${currentCard.mnemonic ? `<div class="hint-mnemonic">💡 ${currentCard.mnemonic}</div>` : ''}
+      ${currentCard.etymology ? `<div class="hint-etymology">📖 ${currentCard.etymology}</div>` : ''}
+    </div>`;
+  }
+
+  if (mode === 'choice') {
+    if (phase === 'question') html += `<div class="center" style="font-size:13px;color:var(--slate);margin-bottom:12px">この単語の意味は？</div>`;
+    choices.forEach(c => {
+      let cls = 'choice-btn';
+      if (phase === 'result') {
+        if (c.id === currentCard.id) cls += ' correct';
+        else if (c.id === selected) cls += ' wrong';
+        else cls += ' other-result';
+      }
+      const check = (phase === 'result' && c.id === currentCard.id) ? ' ✓' : '';
+      html += `<button class="${cls}" ${phase==='result'?'disabled':''} onclick="handleChoice(${c.id})">${c.meaning}${check}</button>`;
+    });
+  } else {
+    if (phase === 'question') {
+      html += `<div class="center" style="font-size:13px;color:var(--slate);margin-bottom:10px">日本語で意味を入力してください</div>
+        <input id="write-input" class="input-field" type="text" value="${writeInput.replace(/"/g,'&quot;')}" placeholder="日本語で意味を入力…" oninput="writeInput=this.value" onkeydown="if(event.key==='Enter'&&this.value.trim())checkWrite()">
+        <button class="btn btn-full" onclick="checkWrite()" ${!writeInput.trim()?'disabled':''}>答え合わせ</button>`;
+    } else {
+      html += `<div class="answer-box ${writeResult?'correct-ans':'wrong-ans'}">
+        <div class="ans-label">あなたの回答</div>
+        <div class="ans-value">${writeInput}</div>
+      </div>
+      <div class="answer-box official-ans">
+        <div class="ans-label">正解</div>
+        <div class="ans-value teal">${currentCard.meaning}</div>
+      </div>
+      <div class="center" style="font-size:11px;color:var(--slate);margin-bottom:8px">採点を修正できます</div>
+      <div class="flex-row">
+        <button class="btn btn-success flex-1" onclick="overrideWrite(true)">✅ 正解にする</button>
+        <button class="btn btn-danger flex-1" onclick="overrideWrite(false)">❌ 不正解にする</button>
+      </div>`;
+    }
+  }
+  html += `</div>`;
+
+  if (phase === 'result') {
+    html += `<button class="btn btn-full" onclick="nextCard()">${qIdx+1 < queue.length ? '次へ →' : '結果を見る 🎉'}</button>`;
+  }
+  return html;
+}
+
+function buildDashboard() {
+  const masteredCount = cards.filter(c => mastery(c).label === 'マスター').length;
+  const studiedCount = cards.filter(c => c.totalReviews > 0).length;
+  const reviewCount = cards.filter(c => mastery(c).label === '要復習').length;
+  let html = `<div class="stats-grid">
+    <div class="stat-card"><div class="stat-value" style="color:var(--purple)">${cards.length}</div><div class="stat-label">総単語</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--teal)">${studiedCount}</div><div class="stat-label">学習済み</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--amber)">${masteredCount}</div><div class="stat-label">マスター</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--red)">${reviewCount}</div><div class="stat-label">要復習</div></div>
+  </div>
+  <div class="filter-row">
+    ${['all','未学習','学習中','マスター','要復習'].map(f =>
+      `<button class="btn ${dashFilter===f?'':'btn-ghost'}" style="padding:5px 12px;font-size:12px" onclick="setFilter('${f}')">${f==='all'?'すべて':f}</button>`
+    ).join('')}
+  </div>
+  <input class="input-field" type="text" value="${dashSearch.replace(/"/g,'&quot;')}" placeholder="単語・意味で検索…" oninput="dashSearch=this.value;render()" style="margin-bottom:12px">
+  <div class="card">`;
+
+  const filtered = cards.filter(c => {
+    if (dashFilter !== 'all' && mastery(c).label !== dashFilter) return false;
+    if (dashSearch && !c.word.toLowerCase().includes(dashSearch.toLowerCase()) && !c.meaning.includes(dashSearch)) return false;
+    return true;
+  });
+  html += `<div class="section-title">${filtered.length}件</div><div class="word-list">`;
+  filtered.slice(0, 300).forEach(c => {
+    const m = mastery(c);
+    const rate = c.totalReviews ? Math.round(c.correctCount / c.totalReviews * 100) : 0;
+    html += `<div class="word-item">
+      <div class="word-item-left">
+        <div class="word-item-name">${c.word}</div>
+        <div class="word-item-meaning">${c.meaning}</div>
+        ${c.mnemonic ? `<div class="word-item-mnemonic">💡 ${c.mnemonic}</div>` : ''}
+      </div>
+      <div class="word-item-right">
+        <span class="tag" style="background:${m.color}22;color:${m.color};border:1px solid ${m.color}44">${m.label}</span>
+        <div class="word-item-count">${c.totalReviews}回/${rate}%</div>
+      </div>
+    </div>`;
+  });
+  html += `</div></div>`;
+  return html;
+}
+
+function buildImport() {
+  return `<div class="card">
+    <div style="font-size:15px;font-weight:700;margin-bottom:8px">CSVで単語をインポート</div>
+    <div style="font-size:13px;color:var(--slate);margin-bottom:12px;line-height:1.8">
+      形式: <code style="color:var(--teal);font-size:12px">単語, 意味, 覚え方, 語源</code>
+    </div>
+    <textarea class="input-field" placeholder="ubiquitous,どこにでもある,ubi=どこでも,ラテン語 ubique" oninput="csvText=this.value">${csvText}</textarea>
+    <button class="btn btn-full" style="margin-bottom:10px" onclick="handleImport()" ${!csvText.trim()?'disabled':''}>インポート実行</button>
+    ${importMsg ? `<div class="import-msg ${importMsgType==='ok'?'ok':'err'}">${importMsg}</div>` : ''}
+    <hr>
+    <button class="btn btn-danger btn-full" onclick="handleReset()">データをリセット</button>
+  </div>`;
+}
+
+// ── Event Handlers ─────────────────────────────────────────────
+function attachEvents() {
+  // input focus for write mode
+  const wi = document.getElementById('write-input');
+  if (wi) { wi.focus(); wi.value = writeInput; }
+}
+
+function switchTab(t) { tab = t; render(); }
+function switchMode(m) { mode = m; queue = []; sessionDone = false; render(); }
+function toggleHint() { showHint = !showHint; render(); }
+function setFilter(f) { dashFilter = f; render(); }
+
+function startSession() {
+  const due = getDue(cards);
+  if (!due.length) return;
+  queue = shuffle(due);
+  qIdx = 0; phase = 'question';
+  selected = null; writeInput = ''; writeResult = null;
+  sessionCorrect = 0; sessionWrong = 0;
+  sessionDone = false; showHint = false;
+  currentCard = queue[0];
+  if (mode === 'choice') choices = getChoices(cards, currentCard);
+  render();
+}
+
+function backToTop() { queue = []; sessionDone = false; render(); }
+function resetAll() { cards = cards.map(c => ({...c, nextReview: 0})); persist(); render(); }
+
+function applyAnswer(card, ok) {
+  const quality = ok ? 4 : 1;
+  const upd = sm2(card, quality);
+  cards = cards.map(c => c.id !== card.id ? c : {
+    ...c, ...upd,
+    totalReviews: c.totalReviews + 1,
+    correctCount: c.correctCount + (ok ? 1 : 0)
+  });
+  if (ok) sessionCorrect++; else sessionWrong++;
+  persist();
+}
+
+function nextCard() {
+  if (qIdx + 1 >= queue.length) { sessionDone = true; currentCard = null; render(); return; }
+  qIdx++;
+  currentCard = queue[qIdx];
+  phase = 'question'; selected = null;
+  writeInput = ''; writeResult = null; showHint = false;
+  if (mode === 'choice') choices = getChoices(cards, currentCard);
+  render();
+}
+
+function handleChoice(id) {
+  if (phase !== 'question') return;
+  selected = id;
+  phase = 'result';
+  applyAnswer(currentCard, id === currentCard.id);
+  render();
+}
+
+function checkWrite() {
+  const input = writeInput.trim();
+  const ok = currentCard.meaning.includes(input) || input === currentCard.meaning;
+  writeResult = ok;
+  phase = 'result';
+  applyAnswer(currentCard, ok);
+  render();
+}
+
+function overrideWrite(ok) {
+  const wasOk = writeResult;
+  cards = cards.map(c => {
+    if (c.id !== currentCard.id) return c;
+    const u = {totalReviews: c.totalReviews - 1, correctCount: c.correctCount - (wasOk ? 1 : 0)};
+    const upd = sm2({...c, ...u}, ok ? 4 : 1);
+    return {...c, ...u, ...upd, totalReviews: u.totalReviews + 1, correctCount: u.correctCount + (ok ? 1 : 0)};
+  });
+  if (wasOk && !ok) { sessionCorrect--; sessionWrong++; }
+  if (!wasOk && ok) { sessionWrong--; sessionCorrect++; }
+  writeResult = ok;
+  persist();
+  render();
+}
+
+function handleImport() {
+  try {
+    const lines = csvText.trim().split('\n').filter(Boolean);
+    const ws = lines.map(l => {
+      const p = l.split(',');
+      return {word: p[0]?.trim(), meaning: p[1]?.trim(), mnemonic: p[2]?.trim()||'', etymology: p[3]?.trim()||''};
+    }).filter(w => w.word && w.meaning);
+    cards = mergeNew(cards, ws);
+    persist();
+    importMsg = `✅ ${ws.length}件インポート完了`;
+    importMsgType = 'ok';
+    csvText = '';
+  } catch {
+    importMsg = '❌ フォーマットエラー';
+    importMsgType = 'err';
+  }
+  render();
+}
+
+function handleReset() {
+  if (!confirm('全データをリセットしますか？')) return;
+  cards = buildInitial();
+  persist();
+  importMsg = '✅ リセット完了';
+  importMsgType = 'ok';
+  render();
+}
+
+// ── Init ───────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  render();
+});
+</script>
+<div id="app"></div>
+</body>
+</html>
